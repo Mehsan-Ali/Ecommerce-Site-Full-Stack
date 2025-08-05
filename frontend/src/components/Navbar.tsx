@@ -27,15 +27,13 @@ export const Navbar = () => {
     const [visible, setVisible] = useState(false)
     return (
         <>
-            <div className={`flex justify-between items-center py-4 bg-gray-800/10 px-10`} >
-                <div>
-                    <img src={assets.logo} alt="" className='w-[10rem]' />
-                </div>
+            <div className={`flex justify-between items-center py-4 bg-gray-800/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]`} >
+                <img src={assets.logo} alt="" className='w-36' />
 
                 <ul className='md:flex gap-10 font-semibold hidden '>
                     {
                         NavgPage.map((item) => (
-                            <NavLink to={item.path} key={item.id} className={({ isActive }) => isActive ? 'text-gray-900  flex flex-col items-center border-b-2' : 'text-gray-500 hover:text-gray-900 flex flex-col items-center'}>
+                            <NavLink to={item.path} key={item.id} className={({ isActive }) => isActive ? 'text-gray-900  flex flex-col items-center border-b-[2px]' : 'text-gray-500 hover:text-gray-900 flex flex-col items-center'}>
                                 <li>
                                     <span className='relative pb-1 after:absolute after:bottom-0 after:left-0 after:w-0 font-semibold after:h-[1.5px] after:bg-[#3a3a3a] after:transition-all after:duration-300 hover:after:w-full'>
                                         {item.name}
