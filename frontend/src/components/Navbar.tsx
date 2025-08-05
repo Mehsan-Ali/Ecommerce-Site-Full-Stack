@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 const NavgPage = [
     {
         id: 1,
@@ -28,7 +28,9 @@ export const Navbar = () => {
     return (
         <>
             <div className={`flex justify-between items-center py-4 bg-gray-200/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]`} >
-                <img src={assets.logo} alt="" className='w-36' />
+                <Link to={'/'}>
+                    <img src={assets.logo} alt="" className='w-36' />
+                </Link>
 
                 <ul className='md:flex gap-10 font-semibold hidden '>
                     {

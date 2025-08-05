@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Product } from '../../types/Product';
+import { products } from '../../assets/assets';
 
 interface ShopState {
   products: Product[];
@@ -8,7 +9,7 @@ interface ShopState {
 }
 
 const initialState: ShopState = {
-  products: [],
+  products: products,
   currency: '$',
   delivery_fee: 10,
 };
