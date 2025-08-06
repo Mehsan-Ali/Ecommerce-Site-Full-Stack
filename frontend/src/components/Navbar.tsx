@@ -27,7 +27,7 @@ export const Navbar = () => {
     const [visible, setVisible] = useState(false)
     return (
         <>
-            <div className={`flex justify-between items-center py-4 bg-gray-200/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]`} >
+            <div className={`flex justify-between items-center py-4 bg-gray-200/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] border-b border-gray-200`} >
                 <Link to={'/'}>
                     <img src={assets.logo} alt="" className='w-36' />
                 </Link>
