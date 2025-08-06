@@ -1,11 +1,69 @@
-import React, { useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useAppSelector } from '../store/hooks'
 import { Title } from '../components/Title'
 import { ProductItem } from '../components/ProductItem'
+import { type Product } from '../types/Product'
 
 export const Collection = () => {
     const products = useAppSelector((state) => state.shop.products)
     const [filters, setFilters] = useState(false)
+    const [filterProducts, setFilterProducts] = useState<Product[]>([])
+    const [category, setCategory] = useState<string[]>([])
+    const [subcategory, setSubCategory] = useState<string[]>([])
+    const [sorType, setSortType] = useState('relavent')
+
+    const toggleCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (category.includes(e.target.value)) {
+            setCategory(prev => prev.filter(item => item !== e.target.value))
+            console.log(category)
+        } else {
+            setCategory(prev => [...prev, e.target.value])
+        }
+    }
+    const toggleSubCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        if (subcategory.includes(value)) {
+            setSubCategory(prev => prev.filter(item => item !== value))
+        } else {
+            setSubCategory(prev => [...prev, value])
+        }
+    }
+    const applyFilter = () => {
+        let productsCopy = products.slice()
+
+        if (category.length > 0) {
+            productsCopy = productsCopy.filter(item => category.includes(item.category))
+        }
+
+        if (subcategory.length > 0) {
+            productsCopy = productsCopy.filter(item => subcategory.includes(item.subCategory))
+        }
+        setFilterProducts(productsCopy)
+    }
+    const sortProduct = () => {
+        let fyp = filterProducts.slice()
+        switch (sorType) {
+            case 'low-high':
+                setFilterProducts(fyp.sort((a, b) => a.price - b.price))
+                break;
+
+            case 'high-low':
+                setFilterProducts(fyp.sort((a, b) => b.price - a.price))
+                break;
+
+            default:
+                applyFilter()
+                break;
+        }
+    }
+    useEffect(() => {
+        applyFilter()
+    }, [category, subcategory])
+
+    useEffect(()=>{
+        sortProduct()
+    },[sorType])
+
     return (
         <div className='flex flex-col md:flex-row gap-5 sm:gap-10 pt-10 px-4 sm:px-[5vw]'>
             {/* ------------ Filter Options --------------- */}
@@ -13,47 +71,47 @@ export const Collection = () => {
                 <p onClick={() => setFilters(!filters)} className='my-4.5 text-gray-700 flex items-center text-xl cursor-pointer gap-2'>Filters</p>
 
                 {
-                    filters ? 
-                <div className='flex flex-col gap-5'>
-                    {/* ------------------ Categories ------------------- */}
-                    <div className='border border-gray-300 rounded-md p-4'>
-                        <p className='uppercase my-2 text-lg'>Categories</p>
-                        <form action="" className='flex flex-col gap-1 text-sm text-gray-700'>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="men" id="men" className='w-3' />
-                                <label htmlFor="men">Men</label>
+                    filters ?
+                        <div className='flex flex-col gap-5'>
+                            {/* ------------------ Categories ------------------- */}
+                            <div className='border border-gray-300 rounded-md p-4'>
+                                <p className='uppercase my-2 text-lg'>Categories</p>
+                                <div className='flex flex-col gap-1 text-sm text-gray-700'>
+                                    <div className='flex items-center gap-2'>
+                                        <input value={'Men'} onChange={toggleCategory} type="checkbox" name="men" id="men" className='w-3' />
+                                        <label htmlFor="men">Men</label>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <input value={'Women'} onChange={toggleCategory} type="checkbox" name="women" id="women" className='w-3' />
+                                        <label htmlFor="women">Women</label>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <input value={'Kids'} onChange={toggleCategory} type="checkbox" name="kids" id="kids" className='w-3' />
+                                        <label htmlFor="kids">Kids</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="women" id="women" className='w-3' />
-                                <label htmlFor="women">Women</label>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="kids" id="kids" className='w-3' />
-                                <label htmlFor="kids">Kids</label>
-                            </div>
-                        </form>
-                    </div>
 
-                    {/* ------------------ Type ------------------- */}
+                            {/* ------------------ Type ------------------- */}
 
-                    <div className='border border-gray-300 rounded-md p-4'>
-                        <p className='uppercase my-2 text-lg'>TYPE</p>
-                        <form action="" className='flex flex-col gap-1 text-gray-700 text-sm'>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="topwear" id="topwear" className='w-3' />
-                                <label htmlFor="topwear">Topwear</label>
+                            <div className='border border-gray-300 rounded-md p-4'>
+                                <p className='uppercase my-2 text-lg'>TYPE</p>
+                                <div className='flex flex-col gap-1 text-gray-700 text-sm'>
+                                    <div className='flex items-center gap-2'>
+                                        <input type="checkbox" name="topwear" id="topwear" onChange={toggleSubCategory} value={'Topwear'} className='w-3' />
+                                        <label htmlFor="topwear">Topwear</label>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <input type="checkbox" name="bottomwear" id="bottomwear" className='w-3' onChange={toggleSubCategory} value={'Bottomwear'} />
+                                        <label htmlFor="bottomwear">Bottomwear</label>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <input type="checkbox" name="winterwear" id="winterwear" className='w-3' onChange={toggleSubCategory} value={'Winterwear'} />
+                                        <label htmlFor="winterwear">Winterwear</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="bottomwear" id="bottomwear" className='w-3' />
-                                <label htmlFor="bottomwear">Bottomwear</label>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <input type="checkbox" name="winterwear" id="winterwear" className='w-3' />
-                                <label htmlFor="winterwear">winterwear</label>
-                            </div>
-                        </form>
-                    </div>
-                </div> : null
+                        </div> : null
                 }
             </div>
 
@@ -61,17 +119,17 @@ export const Collection = () => {
             <div className='flex-9/12 pb-10 sm:pb-28'>
                 <div className='flex justify-between items-center py-2 text-center sm:text-start text-3xl'>
                     <Title text1='All' text2='Collections' />
-                    <select className='border-2 border-gray-200 py-2 text-sm px-2 outline-0 w-fit'>
-                        <option value="relevant">Sort by: Relevant</option>
+                    <select onChange={(e)=> setSortType(e.target.value)} className='border-2 border-gray-200 py-2 text-sm px-2 outline-0 w-fit'>
+                        <option value="relavent">Sort by: Relavent</option>
                         <option value="low-high">Sort by: Low to High</option>
                         <option value="high-low">Sort by: High to Low</option>
                     </select>
                 </div>
                 {
-                    products.length > 0 ? (
+                    filterProducts.length > 0 ? (
                         <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
                             {
-                                products.map((product) => (
+                                filterProducts.map((product) => (
                                     <ProductItem key={product._id} {...product} />
                                 ))
                             }
