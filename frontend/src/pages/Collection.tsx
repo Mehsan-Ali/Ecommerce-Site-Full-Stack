@@ -7,11 +7,13 @@ export const Collection = () => {
     const products = useAppSelector((state) => state.shop.products)
     const [filters, setFilters] = useState(false)
     return (
-        <div className='flex flex-col sm:flex-row gap1 sm:gap-10 pt-10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <div className='flex flex-col md:flex-row gap-5 sm:gap-10 pt-10 px-4 sm:px-[5vw]'>
             {/* ------------ Filter Options --------------- */}
             <div className='min-w-60 grow'>
-                <p className='my-4.5 text-gray-700 flex items-center text-xl cursor-pointer gap-2'>Filters</p>
+                <p onClick={() => setFilters(!filters)} className='my-4.5 text-gray-700 flex items-center text-xl cursor-pointer gap-2'>Filters</p>
 
+                {
+                    filters ? 
                 <div className='flex flex-col gap-5'>
                     {/* ------------------ Categories ------------------- */}
                     <div className='border border-gray-300 rounded-md p-4'>
@@ -51,17 +53,23 @@ export const Collection = () => {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> : null
+                }
             </div>
 
             {/* ------------ All Collections --------------- */}
-            <div className='grow'>
-                <div className='py-2 text-3xl'>
+            <div className='flex-9/12 pb-10 sm:pb-28'>
+                <div className='flex justify-between items-center py-2 text-center sm:text-start text-3xl'>
                     <Title text1='All' text2='Collections' />
+                    <select className='border-2 border-gray-200 py-2 text-sm px-2 outline-0 w-fit'>
+                        <option value="relevant">Sort by: Relevant</option>
+                        <option value="low-high">Sort by: Low to High</option>
+                        <option value="high-low">Sort by: High to Low</option>
+                    </select>
                 </div>
                 {
                     products.length > 0 ? (
-                        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+                        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
                             {
                                 products.map((product) => (
                                     <ProductItem key={product._id} {...product} />
