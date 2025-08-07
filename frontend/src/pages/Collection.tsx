@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppSelector } from '../store/hooks'
 import { Title } from '../components/Title'
 import { ProductItem } from '../components/ProductItem'
