@@ -9,9 +9,9 @@ export const SearchBar = () => {
     const { showSearch } = useAppSelector((state) => state.shop)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
         const value = e.target.value
         dispatch(setSearch(value))
-        e.preventDefault()
     }
 
     // const handleSubmit = (e: React.FormEvent) => {

@@ -13,6 +13,15 @@ export const Collection = () => {
     const [subcategory, setSubCategory] = useState<string[]>([])
     const [sorType, setSortType] = useState('relavent')
     const { search } = useAppSelector((state) => state.shop)
+    const debounce = (func: any, delay: number) => {
+        let timeout: any
+        return (...args: any) => {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                func(...args)
+            }, delay)
+        }
+    }
 
     const toggleCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (category.includes(e.target.value)) {
@@ -45,6 +54,7 @@ export const Collection = () => {
         }
         setFilterProducts(productsCopy)
     }
+
     const sortProduct = () => {
         let fyp = filterProducts.slice()
         switch (sorType) {
@@ -63,7 +73,8 @@ export const Collection = () => {
     }
 
     useEffect(() => {
-        applyFilter()
+        const optimizedSearch = debounce(applyFilter, 2000);
+        optimizedSearch()
     }, [category, subcategory, search])
 
     useEffect(() => {
