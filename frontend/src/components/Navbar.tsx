@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { setShowSearch } from '../store/slice/shopSlice'
 const NavgPage = [
     {
         id: 1,
@@ -24,7 +26,15 @@ const NavgPage = [
     }
 ]
 export const Navbar = () => {
+    const navg = useNavigate()
+    const dispatch = useAppDispatch()
+    const { showSearch } = useAppSelector((state) => state.shop)
     const [visible, setVisible] = useState(false)
+    const toggleButn = () => {
+        navg('/collection')
+        dispatch(setShowSearch(!showSearch))
+    }
+
     return (
         <>
             <div className={`flex justify-between items-center py-4 bg-gray-200/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] border-b border-gray-200`} >
@@ -47,7 +57,8 @@ export const Navbar = () => {
                 </ul>
 
                 <div className='flex gap-5 items-center'>
-                    <img src={assets.search_icon} alt="" className='w-5 cursor-pointer' />
+                    {/* <img src={assets.search_icon} onClick={() => dispatch(setShowSearch(!showSearch))} alt="" className='w-5 cursor-pointer' /> */}
+                    <img src={assets.search_icon} onClick={toggleButn} alt="" className='w-5 cursor-pointer' />
                     <div className='group relative'>
                         <img src={assets.profile_icon} alt="" className='w-5 cursor-pointer' />
                         <div className='group-hover:block hidden dropdown-menu absolute pt-4 right-0 shadow-lg rounded-md'>
