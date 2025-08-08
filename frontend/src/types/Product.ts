@@ -11,7 +11,7 @@ export interface Product {
   bestseller: boolean;
 }
 
-export interface CartItem extends Product {
+export interface CartItem extends AddToCartData {
   quantity: number
 }
 
@@ -19,4 +19,12 @@ export interface CartState {
   items: CartItem[]
   totalAmount: number
   totalItems: number
+}
+
+export interface AddToCartData {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  size: string;
 }

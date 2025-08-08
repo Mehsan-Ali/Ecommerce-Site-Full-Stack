@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { assets, products } from '../../assets/assets'
+import { useAppDispatch } from '../../store/hooks'
+import { addToCart } from '../../store/slice/cartSlice'
+import type { AddToCartData } from '../../types/Product'
 
 export default function HeroSection({ id }: { id?: string }) {
+    const dispatch = useAppDispatch()
     const [productData, setProductData] = useState(products)
     const [selectedSize, setSelectedSize] = useState('')
     const [selectedImage, setSelectedImage] = useState(0)
     const productId = id || null
-    
+
     const colors = [
         { id: 'white', name: 'White', classes: 'bg-white checked:outline-gray-400' },
         { id: 'gray', name: 'Gray', classes: 'bg-gray-200 checked:outline-gray-400' },
@@ -15,7 +19,7 @@ export default function HeroSection({ id }: { id?: string }) {
     const fetchProduct = async () => {
         await products.map((item: any) => {
             if (productId === item._id) {
-                setProductData([item]) 
+                setProductData([item])
             }
         })
     }
@@ -23,12 +27,13 @@ export default function HeroSection({ id }: { id?: string }) {
     useEffect(() => {
         fetchProduct()
     }, [productId])
-    const handleAddToCart = () => {
+    const handleAddToCart = (data: AddToCartData) => {
         if (!selectedSize) {
             alert('Please select a size')
             return
         }
-        alert(`Added to cart: Size ${selectedSize}`)
+        dispatch(addToCart(data))
+        alert(`Added to cart`)
     }
 
     return (
@@ -77,7 +82,7 @@ export default function HeroSection({ id }: { id?: string }) {
 
                                 <div className="flex items-center gap-3 mt-4">
                                     <div className="flex items-center">
-                                        {[1, 2, 3, 4, 5].map((_,index) => (
+                                        {[1, 2, 3, 4, 5].map((_, index) => (
                                             <img key={index} src={assets.star_icon} alt="" className='w-5 h-5' />
                                         ))}
                                     </div>
@@ -133,7 +138,7 @@ export default function HeroSection({ id }: { id?: string }) {
 
                             <button
                                 className="w-full bg-black text-white py-4 px-8 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors duration-200"
-                                onClick={handleAddToCart}
+                                onClick={() => handleAddToCart({ _id: item._id, name: item.name, image: item.image[selectedImage], price: item.price, size: selectedSize })}
                             >
                                 ADD TO CART
                             </button>

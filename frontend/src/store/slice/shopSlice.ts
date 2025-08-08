@@ -37,6 +37,5 @@ const shopSlice = createSlice({
   }
 })
 
-export const { setCurrency, setDeliveryFee, setSearch, setShowSearch } =
-  shopSlice.actions
+export const { setCurrency, setDeliveryFee, setSearch, setShowSearch } = shopSlice.actions
 export default shopSlice.reducer
