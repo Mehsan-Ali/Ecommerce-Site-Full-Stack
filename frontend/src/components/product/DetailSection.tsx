@@ -22,7 +22,7 @@ export const DetailSection = () => {
         <div className='flex gap-4 px-2 md:px-10 flex-wrap lg:flex-nowrap'>
             {
                 DeatilSection.map((item, index) => (
-                    <div key={index} className='p-8 grow space-y-1 mx-auto shadow-md bg-gray-950/10 rounded-2xl'>
+                    <div key={index} className='p-8 grow space-y-1 mx-auto shadow-md bg-gray-400/10 rounded-2xl'>
                         <div className='flex items-center gap-2 mb-4'>
                             {item.icon}
                             <h4 className='text-xl text-black poppins-semibold'>{item.title}</h4>
