@@ -1,10 +1,12 @@
+import HeroSection from '../components/cart/HeroSection'
 import { useAppSelector } from '../store/hooks'
 
 export const Cart = () => {
-    const { items, totalAmount, totalItems } = useAppSelector((state) => state.cart)
+    // const { items, totalAmount, totalItems } = useAppSelector((state) => state.cart)
     return (
         <>
-            {
+        <HeroSection />
+            {/* {
                 items.length <= 0 ?
                     <div>
                         Your cart is Empty
@@ -26,7 +28,7 @@ export const Cart = () => {
                             <p>Total Amount: ${totalAmount}</p>
                         </div>
                     </div>
-            }
+            } */}
         </>
     )
 }
