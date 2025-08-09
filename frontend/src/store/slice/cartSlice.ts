@@ -7,7 +7,9 @@ const initialState: CartState = storedCart
   : {
       items: [],
       totalAmount: 0,
-      totalItems: 0
+      totalItems: 0,
+      delivery_fee: 10,
+      total: 0
     }
 
 const cartSlice = createSlice({
@@ -28,7 +30,9 @@ const cartSlice = createSlice({
         state.items.push({ ...product, size, quantity: 1 })
       }
       state.totalItems += 1
-      state.totalAmount += product.price
+      state.totalAmount += product.price 
+      state.total = state.totalAmount + state.delivery_fee
+      
       // Save to localStorage
       localStorage.setItem('cart', JSON.stringify(state))
     },

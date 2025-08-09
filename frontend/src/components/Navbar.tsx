@@ -75,7 +75,7 @@ export const Navbar = () => {
                     </div>
                     <NavLink to='/cart' className='relative'>
                         <img src={assets.cart_icon} alt="" className='w-ssm cursor-pointer sm:w-slg' />
-                        <p className='absolute -bottom-1 -right-1.5 text-[11px] bg-black text-white rounded-full w-ssm  sm:w-slg leading-4 flex justify-center items-center aspect-square'>{cartItem}</p>
+                        <p className='absolute -bottom-1 -right-1.5 text-[11px] bg-black text-white rounded-full w-3 sm:w-4.5 leading-4 flex justify-center items-center aspect-square'>{cartItem}</p>
                     </NavLink>
                     <img src={assets.menu_icon} alt="" onClick={() => setVisible(!visible)} className='min-w-5 w-5 cursor-pointer flex md:hidden' />
 
