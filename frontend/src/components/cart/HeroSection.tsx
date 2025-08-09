@@ -1,8 +1,10 @@
-import React from 'react'
 import { Title } from '../Title'
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { decreaseQuantity, increaseQuantity, removeFromCart } from '../../store/slice/cartSlice'
+import { MinusCircleIcon, PlusCircle, Trash, Trash2Icon } from 'lucide-react'
 
 const HeroSection = () => {
+    const dispatch = useAppDispatch()
     const { items, totalItems, totalAmount } = useAppSelector((state) => state.cart)
     return (
         <div className='px-5 md:px-36'>
@@ -26,14 +28,32 @@ const HeroSection = () => {
                                     </div>
                                     <span className='space-y-1'>
                                         <h6>Color</h6>
-                                        <h6>Size: {item.size.split('').join(', ')}</h6>
+                                        <h6>Size: {item.size.match(/XXL|XL|S|M|L/g)?.join(', ')}</h6>
                                     </span>
-                                    <span>
-                                        <h6>Quantity: <span className='font-semibold px-2'>{item.quantity}</span></h6>
+                                    <span className='flex items-center gap-5'>
+                                        <h6>Quantity:</h6>
+                                        <span className='border border-gray-500 rounded-md px-5 py-1'>
+                                            {item.quantity}
+                                        </span>
+
+                                        <button onClick={() => dispatch(decreaseQuantity(item))}>
+                                            <MinusCircleIcon />
+                                        </button>
+                                        {/* <span className='flex gap-5 items-center font-semibold px-2'>
+                                            <button onClick={() => dispatch(increaseQuantity(item._id))}>
+                                                <PlusCircle />
+                                            </button>
+                                            <span className='border border-gray-500 rounded-md px-5 py-1'>
+                                                {item.quantity}
+                                            </span>
+                                            <button onClick={() => dispatch(decreaseQuantity(item._id))}>
+                                                <MinusCircleIcon />
+                                            </button>
+                                        </span> */}
                                     </span>
-                                    <span className='flex justify-between'>
-                                        <h6>In Stock</h6>
-                                        <h6>Remove</h6>
+                                    <span className='flex justify-between items-center'>
+                                        <h6 className='text-green-600'>In Stock</h6>
+                                        <span onClick={() => dispatch(removeFromCart(item))} className='text-red-600 cursor-pointer bg-gray-300/20 p-2 rounded-xl hover:scale-105 transition-all duration-200'><Trash2Icon /></span>
                                     </span>
                                 </div>
                             </div>

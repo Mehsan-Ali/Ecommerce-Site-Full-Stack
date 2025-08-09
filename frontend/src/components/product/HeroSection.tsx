@@ -3,6 +3,7 @@ import { assets, products } from '../../assets/assets'
 import { useAppDispatch } from '../../store/hooks'
 import { addToCart } from '../../store/slice/cartSlice'
 import type { AddToCartData } from '../../types/Product'
+import { toast } from 'react-toastify'
 
 export default function HeroSection({ id }: { id?: string }) {
     const dispatch = useAppDispatch()
@@ -29,11 +30,11 @@ export default function HeroSection({ id }: { id?: string }) {
     }, [productId])
     const handleAddToCart = (data: AddToCartData) => {
         if (!selectedSize) {
-            alert('Please select a size')
+            toast.error('Please select a size')
             return
         }
         dispatch(addToCart(data))
-        alert(`Added to cart`)
+        toast.success(`Added to cart`)
     }
 
     return (
