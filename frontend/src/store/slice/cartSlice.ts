@@ -18,19 +18,21 @@ const cartSlice = createSlice({
       const product = action.payload
       const size = product.size
 
-      const existingProduct = state.items.find(item => item._id === product._id && item.size === size)
+      const existingProduct = state.items.find(
+        item => item._id === product._id && item.size === size
+      )
 
       if (existingProduct) {
         existingProduct.quantity += 1
       } else {
-        state.items.push({ ...product, size ,quantity: 1 })
+        state.items.push({ ...product, size, quantity: 1 })
       }
       state.totalItems += 1
       state.totalAmount += product.price
       // Save to localStorage
       localStorage.setItem('cart', JSON.stringify(state))
     },
-    
+
     removeFromCart (
       state,
       action: PayloadAction<{ _id: string; size: string }>
@@ -85,14 +87,12 @@ const cartSlice = createSlice({
       }
 
       state.totalItems = state.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
+        (sum, item) => sum + item.quantity,0
       )
       state.totalAmount = state.items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
       )
-
       localStorage.setItem('cart', JSON.stringify(state))
     },
     // decreaseQuantity (state, action: PayloadAction<string>) {
@@ -174,6 +174,11 @@ const cartSlice = createSlice({
   }
 })
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart } =
-  cartSlice.actions
+export const {
+  addToCart,
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  clearCart
+} = cartSlice.actions
 export default cartSlice.reducer
