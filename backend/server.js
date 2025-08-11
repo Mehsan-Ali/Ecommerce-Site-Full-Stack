@@ -4,15 +4,19 @@ import cors from 'cors'
 import userRouter from "./routes/userRoute.js"
 import DatabaseConn from './config/mongodb.js'
 import ConnectCloudinary from './config/cloudinary.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
+//middlewares
+app.use(express.json())
+app.use(cookieParser());
+app.use(cors())
+
 const PORT = process.env.PORT || 3000
+
 DatabaseConn()
 ConnectCloudinary()
 
-//middlewares
-app.use(express.json())
-app.use(cors())
 
 app.use('/api/user', userRouter)
 
