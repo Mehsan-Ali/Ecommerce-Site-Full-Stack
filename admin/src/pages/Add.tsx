@@ -8,6 +8,8 @@ import { backednUrl } from '../App'
 import { toast } from 'react-toastify'
 
 const Add = ({ token }: { token: string }) => {
+	const [imagePreview, setImagePreview] = useState<string[]>([]);
+	const [loading, setLoading] = useState(false)
 	const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<ProductFormData>({
 		resolver: zodResolver(productSchema), defaultValues: {
 			image: [],
@@ -17,7 +19,6 @@ const Add = ({ token }: { token: string }) => {
 		}
 	})
 	const selectedSizes = watch("sizes");
-	const [imagePreview, setImagePreview] = React.useState<string[]>([]);
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
@@ -38,7 +39,7 @@ const Add = ({ token }: { token: string }) => {
 			setValue("sizes", [...currentSizes, size]);
 		}
 	};
-	
+
 	const onSubmit = async (data: ProductFormData) => {
 		try {
 			const formData = new FormData();
