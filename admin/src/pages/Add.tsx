@@ -30,11 +30,6 @@ const Add = ({ token }: { token: string }) => {
 		}
 	};
 
-	// const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	if (e.target.files) {
-	// 		setValue("image", Array.from(e.target.files));
-	// 	}
-	// };
 	const toggleSize = (size: string) => {
 		const currentSizes = watch("sizes");
 		if (currentSizes.includes(size)) {
@@ -43,24 +38,7 @@ const Add = ({ token }: { token: string }) => {
 			setValue("sizes", [...currentSizes, size]);
 		}
 	};
-	// const onSubmit = async (data: ProductFormData) => {
-	// 	try {
-	// 		const resp = await axios.post(`${backednUrl}/api/product/add`, data, {
-	// 			headers: {
-	// 				Authorization: `Bearer ${token}`
-	// 			}
-	// 		})
-	// 		const productData = resp.data
-	// 		if(productData.success) {
-	// 			toast.success(productData.message)
-	// 			reset()
-	// 		}
-	// 		console.log(productData)
-	// 	} catch (error:any) {
-	// 		console.log(error)
-	// 		toast.error(error.response?.data?.message)
-	// 	}
-	// };
+	
 	const onSubmit = async (data: ProductFormData) => {
 		try {
 			const formData = new FormData();
@@ -92,6 +70,7 @@ const Add = ({ token }: { token: string }) => {
 			if (productData.success) {
 				toast.success(productData.message);
 				reset();
+				setImagePreview([]);
 			}
 			console.log(productData);
 
@@ -104,7 +83,7 @@ const Add = ({ token }: { token: string }) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className='flex flex-col w-full items-start gap-3'>
-				<p>Upoad Image</p>
+				<p>Upload Image</p>
 				<div className="flex gap-5 pt-2 flex-wrap">
 					{/* Show placeholder only if no images */}
 					{imagePreview.length === 0 && (
@@ -188,6 +167,7 @@ const Add = ({ token }: { token: string }) => {
 						<div className='space-y-1 w-full'>
 							<label htmlFor="productPrice">Product Price</label>
 							<input type="number"  {...register("price", { valueAsNumber: true })} id="productPrice" placeholder='0.00' className='border border-gray-300 w-full rounded-md mt-1 py-2 px-2 focus:outline-gray-200 text-gray-600 focus:outline-2' />
+							{errors.price && <p className="text-red-500 text-sm">{errors.price?.message}</p>}
 						</div>
 					</div>
 
