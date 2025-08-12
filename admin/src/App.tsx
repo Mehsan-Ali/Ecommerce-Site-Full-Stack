@@ -7,6 +7,8 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { Login } from './components/Login'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 export const backednUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
   const [token, setToken] = React.useState(localStorage.getItem('token') || '')
