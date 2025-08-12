@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 const Add = ({ token }: { token: string }) => {
 	const [imagePreview, setImagePreview] = useState<string[]>([]);
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState<boolean>(false)
 	const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<ProductFormData>({
 		resolver: zodResolver(productSchema), defaultValues: {
 			image: [],
@@ -24,7 +24,6 @@ const Add = ({ token }: { token: string }) => {
 		if (e.target.files) {
 			const filesArray = Array.from(e.target.files);
 			setValue("image", filesArray); // Update react-hook-form state
-
 			// Create preview URLs
 			const previews = filesArray.map(file => URL.createObjectURL(file));
 			setImagePreview(previews);
@@ -41,9 +40,9 @@ const Add = ({ token }: { token: string }) => {
 	};
 
 	const onSubmit = async (data: ProductFormData) => {
+		setLoading(true)
 		try {
 			const formData = new FormData();
-
 			// Append text fields
 			formData.append("name", data.name);
 			formData.append("description", data.description);
@@ -74,10 +73,11 @@ const Add = ({ token }: { token: string }) => {
 				setImagePreview([]);
 			}
 			console.log(productData);
-
 		} catch (error: any) {
 			console.log(error);
 			toast.error(error.response?.data?.message);
+		} finally {
+			setLoading(false)
 		}
 	};
 
@@ -117,7 +117,9 @@ const Add = ({ token }: { token: string }) => {
 								onClick={() => {
 									const updatedPreviews = imagePreview.filter((_, i) => i !== idx);
 									setImagePreview(updatedPreviews);
-									setValue("image", updatedPreviews as any);
+									const currentFiles = watch("image");
+									const updatedFiles = currentFiles.filter((_, i) => i !== idx);
+									setValue("image", updatedFiles);
 								}}
 								className="absolute top-1 right-1 bg-black text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-600"
 							>
@@ -193,8 +195,14 @@ const Add = ({ token }: { token: string }) => {
 						<label>Add to best seller</label>
 					</div>
 				</div>
-				<button type='submit' className='bg-black cursor-pointer text-sm md:text-base text-white py-3 uppercase font-medium max-w-sm w-full'>
-					Add Product
+				Add Product
+				<button disabled={loading} type='submit' className={`bg-black cursor-pointer text-sm md:text-base text-white py-3 uppercase font-medium max-w-sm w-full ${loading ? "bg-gray-400 cursor-not-allowed transform scale-95" : "bg-black hover:bg-gray-800 cursor-pointer hover:transform hover:scale-105"}`}>
+					{loading ? (
+						<div className="flex items-center justify-center gap-3">
+							<div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+							<span className="animate-pulse">Processing...</span>
+						</div>
+					) : "Add Product"}
 				</button>
 			</div>
 		</form>
