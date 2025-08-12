@@ -49,18 +49,14 @@ const Add = ({ token }: { token: string }) => {
 						<div className='space-y-1 w-full'>
 							<p>Product category</p>
 							<select className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
-								<option value="men">Men</option>
-								<option value="women">Women</option>
-								<option value="kid">kid</option>
+								<option value="topwear">Topwear</option>
+								<option value="bottomwear">Bottomwear</option>
+								<option value="winterwear">Winterwear</option>
 							</select>
 						</div>
 						<div className='space-y-1 w-full'>
-							<p>Product category</p>
-							<select className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
-								<option value="men">Men</option>
-								<option value="women">Women</option>
-								<option value="kid">kid</option>
-							</select>
+							<label htmlFor="productPrice">Product Price</label>
+							<input type="number" name="productPrice" id="productPrice" placeholder='Enter your product price here...' className='border border-gray-400 rounded-md mt-1 py-2 px-2 focus:outline-gray-200 text-gray-600 outline-amber-100 ' />
 						</div>
 					</div>
 				</div>
