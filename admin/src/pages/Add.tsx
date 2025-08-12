@@ -24,6 +24,46 @@ const Add = ({ token }: { token: string }) => {
 						<input type="file" name="image4" id="image4" hidden />
 					</label>
 				</div>
+				{/* ------- Product Text Fields ------- */}
+				<div className='flex flex-col gap-2 w-full mt-2 max-w-xl'>
+
+					<div className='flex flex-col gap-1'>
+						<label htmlFor="title">Product Name</label>
+						<input type="text" name="title" id="title" placeholder='Enter your product title here...' className='border border-gray-400 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 text-gray-600 outline-amber-100 ' />
+					</div>
+
+					<div className='flex flex-col gap-1'>
+						<label htmlFor="description">Product Description</label>
+						<textarea name="description" rows={4} id="description" placeholder='Enter your product description here...' className='border border-gray-400 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 text-gray-600 outline-amber-100 ' />
+					</div>
+
+					<div className='flex justify-between gap-5 mt-2 w-full'>
+						<div className='space-y-1 w-full'>
+							<p>Product category</p>
+							<select className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
+								<option value="men">Men</option>
+								<option value="women">Women</option>
+								<option value="kid">kid</option>
+							</select>
+						</div>
+						<div className='space-y-1 w-full'>
+							<p>Product category</p>
+							<select className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
+								<option value="men">Men</option>
+								<option value="women">Women</option>
+								<option value="kid">kid</option>
+							</select>
+						</div>
+						<div className='space-y-1 w-full'>
+							<p>Product category</p>
+							<select className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
+								<option value="men">Men</option>
+								<option value="women">Women</option>
+								<option value="kid">kid</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 	)
