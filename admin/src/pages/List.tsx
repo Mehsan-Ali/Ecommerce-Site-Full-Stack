@@ -1,9 +1,9 @@
 import React from 'react'
 
-const List = () => {
+const List = ({ token }: { token: string }) => {
   return (
     <div>
-      
+
     </div>
   )
 }
