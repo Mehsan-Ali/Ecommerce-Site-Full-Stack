@@ -195,7 +195,6 @@ const Add = ({ token }: { token: string }) => {
 						<label>Add to best seller</label>
 					</div>
 				</div>
-				Add Product
 				<button disabled={loading} type='submit' className={`bg-black cursor-pointer text-sm md:text-base text-white py-3 uppercase font-medium max-w-sm w-full ${loading ? "bg-gray-400 cursor-not-allowed transform scale-95" : "bg-black hover:bg-gray-800 cursor-pointer hover:transform hover:scale-105"}`}>
 					{loading ? (
 						<div className="flex items-center justify-center gap-3">
