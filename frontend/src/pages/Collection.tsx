@@ -153,7 +153,9 @@ export const Collection = () => {
                         </select>
                     </div>
                     {isLoading ? (
-                        <div className='flex justify-center items-center h-64'>
+                        <div className='flex justify-center items-center gap-2 h-64'>
+							<div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-transparent"></div>
+
                             <p className='text-gray-500'>Loading products...</p>
                         </div>
                     ) : filterProducts.length > 0 ? (
