@@ -7,11 +7,11 @@ import { ProductItem } from './ProductItem'
 export const BestSeller = () => {
     const products = useAppSelector((state) => state.shop.products)
     const [bestProducts, setBestProducts] = useState<Product[]>([])
-
+    console.log(products)
     useEffect(() => {
-        const bestProduct = products.filter((item) => item.bestseller).slice(0,5)
+        const bestProduct = products.filter((item) => item.bestSeller).slice(0,5)
         setBestProducts(bestProduct)
-    }, [])
+    }, [products])
 
     console.log(bestProducts)
 

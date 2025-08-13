@@ -5,12 +5,12 @@ import { type Product } from '../types/Product'
 import { ProductItem } from './ProductItem'
 
 export const LatestCollections = () => {
-  const products = useAppSelector(state => state.shop)
+  const products = useAppSelector(state => state.shop.products)
   const [latestProducts, setLatestProducts] = useState<Product[]>([])
 
   useEffect(() => {
-    setLatestProducts(products.products.slice(0, 10))
-  }, [])
+    setLatestProducts(products.slice(0, 10))
+  }, [products])
 
   return (
     <div className='my-10'>

@@ -4,8 +4,8 @@ export const productSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   price: z.number().positive('Price must be greater than 0'),
   image: z.array(z.instanceof(File)).min(1, 'At least one image is required'),
-  category: z.enum(['men', 'women', 'kid']).refine((value) => value !== undefined, { message: "Select a category" }),
-  subCategory: z.enum(["topwear", "bottomwear", "winterwear"])
+  category: z.enum(['Men', 'Women', 'Kids']).refine((value) => value !== undefined, { message: "Select a category" }),
+  subCategory: z.enum(["Topwear", "Bottomwear", "Winterwear"])
   .refine(val => val !== undefined, { message: "Select a subcategory" }),
   sizes: z.array(z.string()).min(1, 'Select at least one size'),
   bestSeller: z.boolean(),

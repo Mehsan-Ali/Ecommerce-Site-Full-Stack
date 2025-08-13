@@ -8,7 +8,7 @@ export interface Product {
   subCategory: string
   sizes: string[]
   date: number // timestamp
-  bestseller: boolean
+  bestSeller: boolean
 }
 
 export interface CartItem extends AddToCartData {

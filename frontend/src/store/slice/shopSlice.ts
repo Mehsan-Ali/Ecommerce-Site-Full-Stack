@@ -1,6 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { Product } from '../../types/Product'
-import { products } from '../../assets/assets'
+import { client } from '../../APIs/client'
 
 interface ShopState {
   products: Product[]
@@ -9,9 +9,16 @@ interface ShopState {
   search: string
   showSearch: boolean
 }
-
+export const fetchProducts = createAsyncThunk(
+  'shop/fetchProducts',
+  async () => {
+    const resp = await client.get('/api/product/list')
+    console.log(resp.data)
+    return resp.data.allProduct
+  }
+)
 const initialState: ShopState = {
-  products: products,
+  products: [],
   currency: '$',
   delivery_fee: 10,
   search: '',
@@ -34,6 +41,11 @@ const shopSlice = createSlice({
     setShowSearch (state, action: PayloadAction<boolean>) {
       state.showSearch = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      state.products = action.payload
+    })
   }
 })
 

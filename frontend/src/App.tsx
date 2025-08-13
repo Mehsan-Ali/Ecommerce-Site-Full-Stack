@@ -14,8 +14,16 @@ import { Footer } from './components/Footer'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Signup } from './pages/Signup'
+import { useAppDispatch } from './store/hooks'
+import { useEffect } from 'react'
+import { fetchProducts } from './store/slice/shopSlice'
 
 function App() {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+  
   return (
     <>
       <Navbar />

@@ -8,6 +8,7 @@ import { SearchBar } from '../components/SearchBar'
 export const Collection = () => {
     const products = useAppSelector((state) => state.shop.products)
     const [filters, setFilters] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [filterProducts, setFilterProducts] = useState<Product[]>([])
     const [category, setCategory] = useState<string[]>([])
     const [subcategory, setSubCategory] = useState<string[]>([])
@@ -40,19 +41,23 @@ export const Collection = () => {
         }
     }
     const applyFilter = () => {
-        let productsCopy = products.slice()
+        setIsLoading(true)
+        setTimeout(() => {
+            let productsCopy = products.slice()
+            console.log(category, subcategory)
+            if (category.length > 0) {
+                productsCopy = productsCopy.filter(item => category.includes(item.category))
+            }
 
-        if (category.length > 0) {
-            productsCopy = productsCopy.filter(item => category.includes(item.category))
-        }
-
-        if (subcategory.length > 0) {
-            productsCopy = productsCopy.filter(item => subcategory.includes(item.subCategory))
-        }
-        if (search.trim() !== '') {
-            productsCopy = productsCopy.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()) || item.description.toLowerCase().includes(search.toLowerCase()) || item.price.toString().includes(search))
-        }
-        setFilterProducts(productsCopy)
+            if (subcategory.length > 0) {
+                productsCopy = productsCopy.filter(item => subcategory.includes(item.subCategory))
+            }
+            if (search.trim() !== '') {
+                productsCopy = productsCopy.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()) || item.description.toLowerCase().includes(search.toLowerCase()) || item.price.toString().includes(search))
+            }
+            setFilterProducts(productsCopy)
+            setIsLoading(false)
+        }, 100) // Adjust the delay as needed
     }
 
     const sortProduct = () => {
@@ -73,9 +78,10 @@ export const Collection = () => {
     }
 
     useEffect(() => {
-        const optimizedSearch = debounce(applyFilter, 2000);
+        setIsLoading(true)
+        const optimizedSearch = debounce(applyFilter, 500);
         optimizedSearch()
-    }, [category, subcategory, search])
+    }, [category, subcategory, search, products])
 
     useEffect(() => {
         sortProduct()
@@ -86,6 +92,7 @@ export const Collection = () => {
             <SearchBar />
 
             <div className='flex flex-col md:flex-row gap-5 sm:gap-10 pt-10 px-4 sm:px-[5vw]'>
+
                 {/* ------------ Filter Options --------------- */}
                 <div className='min-w-60 grow'>
                     <p onClick={() => setFilters(!filters)} className='my-4.5 text-gray-700 flex items-center text-xl cursor-pointer gap-2'>Filters</p>
@@ -98,15 +105,15 @@ export const Collection = () => {
                                     <p className='uppercase my-2 text-lg'>Categories</p>
                                     <div className='flex flex-col gap-1 text-sm text-gray-700'>
                                         <div className='flex items-center gap-2'>
-                                            <input value={'Men'} onChange={toggleCategory} type="checkbox" name="men" id="men" className='w-3' />
+                                            <input disabled={isLoading} value={'Men'} onChange={toggleCategory} type="checkbox" name="men" id="men" className='w-3' />
                                             <label htmlFor="men">Men</label>
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <input value={'Women'} onChange={toggleCategory} type="checkbox" name="women" id="women" className='w-3' />
+                                            <input disabled={isLoading} value={'Women'} onChange={toggleCategory} type="checkbox" name="women" id="women" className='w-3' />
                                             <label htmlFor="women">Women</label>
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <input value={'Kids'} onChange={toggleCategory} type="checkbox" name="kids" id="kids" className='w-3' />
+                                            <input disabled={isLoading} value={'Kids'} onChange={toggleCategory} type="checkbox" name="kids" id="kids" className='w-3' />
                                             <label htmlFor="kids">Kids</label>
                                         </div>
                                     </div>
@@ -118,15 +125,15 @@ export const Collection = () => {
                                     <p className='uppercase my-2 text-lg'>TYPE</p>
                                     <div className='flex flex-col gap-1 text-gray-700 text-sm'>
                                         <div className='flex items-center gap-2'>
-                                            <input type="checkbox" name="topwear" id="topwear" onChange={toggleSubCategory} value={'Topwear'} className='w-3' />
+                                            <input disabled={isLoading} type="checkbox" name="topwear" id="topwear" onChange={toggleSubCategory} value={'Topwear'} className='w-3' />
                                             <label htmlFor="topwear">Topwear</label>
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <input type="checkbox" name="bottomwear" id="bottomwear" className='w-3' onChange={toggleSubCategory} value={'Bottomwear'} />
+                                            <input disabled={isLoading} type="checkbox" name="bottomwear" id="bottomwear" className='w-3' onChange={toggleSubCategory} value={'Bottomwear'} />
                                             <label htmlFor="bottomwear">Bottomwear</label>
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <input type="checkbox" name="winterwear" id="winterwear" className='w-3' onChange={toggleSubCategory} value={'Winterwear'} />
+                                            <input disabled={isLoading} type="checkbox" name="winterwear" id="winterwear" className='w-3' onChange={toggleSubCategory} value={'Winterwear'} />
                                             <label htmlFor="winterwear">Winterwear</label>
                                         </div>
                                     </div>
@@ -145,20 +152,24 @@ export const Collection = () => {
                             <option value="high-low">Sort by: High to Low</option>
                         </select>
                     </div>
-                    {
-                        filterProducts.length > 0 ? (
-                            <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
-                                {
-                                    filterProducts.map((product) => (
-                                        <ProductItem key={product._id} {...product} />
-                                    ))
-                                }
-                            </div>
-                        ) : (
-                            <div className='flex flex-col items-center h-full justify-center'>
-                                <p className=' text-gray-500'>No products found</p>
-                            </div>
-                        )
+                    {isLoading ? (
+                        <div className='flex justify-center items-center h-64'>
+                            <p className='text-gray-500'>Loading products...</p>
+                        </div>
+                    ) : filterProducts.length > 0 ? (
+                        // filterProducts.length > 0 ? (
+                        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+                            {
+                                filterProducts.map((product) => (
+                                    <ProductItem key={product._id} {...product} />
+                                ))
+                            }
+                        </div>
+                    ) : (
+                        <div className='flex flex-col items-center h-full justify-center'>
+                            <p className=' text-gray-500'>No products found</p>
+                        </div>
+                    )
                     }
                 </div>
             </div>

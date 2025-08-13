@@ -8,6 +8,6 @@ const router = express.Router()
 router.post('/add', adminAuth, upload.array('image', 4), addProduct)
 router.post('/remove', adminAuth, removeProduct)
 router.post('/product', adminAuth, singleProduct)
-router.get('/list', adminAuth, listProducts)
+router.get('/list', listProducts)
 
 export default router

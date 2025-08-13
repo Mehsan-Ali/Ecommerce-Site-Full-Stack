@@ -151,9 +151,9 @@ const Add = ({ token }: { token: string }) => {
 							<p>Product category</p>
 							<select  {...register("category")} className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
 								<option value="">Select</option>
-								<option value="men">Men</option>
-								<option value="women">Women</option>
-								<option value="kid">kid</option>
+								<option value="Men">Men</option>
+								<option value="Women">Women</option>
+								<option value="Kids">Kids</option>
 							</select>
 							{errors.category && <p className="text-red-500 text-sm">{errors.category?.message}</p>}
 						</div>
@@ -161,9 +161,9 @@ const Add = ({ token }: { token: string }) => {
 							<p>Product category</p>
 							<select {...register("subCategory")} className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
 								<option value="">Select</option>
-								<option value="topwear">Topwear</option>
-								<option value="bottomwear">Bottomwear</option>
-								<option value="winterwear">Winterwear</option>
+								<option value="Topwear">Topwear</option>
+								<option value="Bottomwear">Bottomwear</option>
+								<option value="Winterwear">Winterwear</option>
 							</select>
 							{errors.subCategory && <p className="text-red-500 text-sm">{errors.subCategory?.message}</p>}
 						</div>
