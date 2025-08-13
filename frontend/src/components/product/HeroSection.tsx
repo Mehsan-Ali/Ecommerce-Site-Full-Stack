@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { assets, products } from '../../assets/assets'
-import { useAppDispatch } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addToCart } from '../../store/slice/cartSlice'
 import type { AddToCartData } from '../../types/Product'
 import { toast } from 'react-toastify'
 
 export default function HeroSection({ id }: { id?: string }) {
     const dispatch = useAppDispatch()
+    const products = useAppSelector(state => state.shop.products)
     const [productData, setProductData] = useState(products)
     const [selectedSize, setSelectedSize] = useState('')
     const [selectedImage, setSelectedImage] = useState(0)
@@ -17,8 +18,8 @@ export default function HeroSection({ id }: { id?: string }) {
         { id: 'gray', name: 'Gray', classes: 'bg-gray-200 checked:outline-gray-400' },
         { id: 'black', name: 'Black', classes: 'bg-gray-900 checked:outline-gray-900' },
     ]
-    const fetchProduct = async () => {
-        await products.map((item: any) => {
+    const fetchProduct = () => {
+        products.map((item: any) => {
             if (productId === item._id) {
                 setProductData([item])
             }
@@ -143,12 +144,6 @@ export default function HeroSection({ id }: { id?: string }) {
                             >
                                 ADD TO CART
                             </button>
-
-                            <div className="space-y-2 text-sm text-gray-600 pt-4 border-t border-gray-200">
-                                {/* <p><span className="font-semibold text-gray-900">100%</span> Original product.</p>
-                        <p>Cash on delivery is available on this product.</p>
-                        <p>Easy return and exchange policy within 7 days.</p> */}
-                            </div>
                         </div>
                     </div>
                 ))
