@@ -3,6 +3,7 @@ import { assets } from '../assets/assets'
 import { Frown, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { backednUrl } from '../App'
+import { toast } from 'react-toastify'
 
 const List = ({ token }: { token: string }) => {
 	const [productList, setProductList] = useState([])
@@ -26,6 +27,26 @@ const List = ({ token }: { token: string }) => {
 			setIsLoading(false)
 		}
 	}
+	const removeProductItem = async (id: string) => {
+		setIsLoading(true)
+		try {
+			const response = await axios.post(`${backednUrl}/api/product/remove`, { id }, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			})
+			const data = response.data
+			if(data.success) {
+				await fetchProducts()
+				toast.success(data.message)
+			}
+		} catch (error: any) {
+			console.log(error)
+			toast.error(error.response?.data?.message)
+		} finally {
+			setIsLoading(false)
+		}
+	}
 	useEffect(() => {
 		fetchProducts()
 	}, [])
@@ -37,7 +58,7 @@ const List = ({ token }: { token: string }) => {
 			{isLoading && <p>Loading...</p>}
 			{productList.length < 1 ?
 				<div className='flex justify-center items-center gap-2 text-gray-400 h-[50vh]'>
-					<Frown className='mt-1'/>
+					<Frown className='mt-1' />
 					<p className='text-2xl font-medium text-center'>No product found</p>
 				</div>
 				:
@@ -60,7 +81,7 @@ const List = ({ token }: { token: string }) => {
 										<td className='py-2'>{item.name}</td>
 										<td className='py-2 capitalize'>{item.category}</td>
 										<td className='py-2'>${item.price}</td>
-										<td className='py-2'><Trash2 /></td>
+										<td className='py-2'><Trash2 color='red' onClick={() => removeProductItem(item._id)} className='cursor-pointer'/></td>
 									</tr>
 
 								))
