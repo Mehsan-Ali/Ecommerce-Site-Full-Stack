@@ -20,6 +20,12 @@ export const LoginUser = async (req, res) => {
         }
 
         const token = generateJWTToken(existUser._id)
+        // res.cookie('token', token, {
+        //     httpOnly: true,     // can't be accessed by JavaScript
+        //     secure: true,       // only sent over HTTPS
+        //     sameSite: "strict", // prevent CSRF
+        //     maxAge: 24 * 60 * 60 * 1000 // 1 day
+        // })
         return res.status(200).json({ success: true, message: "User Logged In Successfully", user: existUser, token })
 
     } catch (error) {

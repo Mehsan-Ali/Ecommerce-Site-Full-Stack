@@ -57,7 +57,7 @@ export const Collection = () => {
             }
             setFilterProducts(productsCopy)
             setIsLoading(false)
-        }, 100) // Adjust the delay as needed
+        }, 200) // Adjust the delay as needed
     }
 
     const sortProduct = () => {
@@ -79,7 +79,7 @@ export const Collection = () => {
 
     useEffect(() => {
         setIsLoading(true)
-        const optimizedSearch = debounce(applyFilter, 500);
+        const optimizedSearch = debounce(applyFilter, 800);
         optimizedSearch()
     }, [category, subcategory, search, products])
 
@@ -154,12 +154,11 @@ export const Collection = () => {
                     </div>
                     {isLoading ? (
                         <div className='flex justify-center items-center gap-2 h-64'>
-							<div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-transparent"></div>
+                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-transparent"></div>
 
                             <p className='text-gray-500'>Loading products...</p>
                         </div>
                     ) : filterProducts.length > 0 ? (
-                        // filterProducts.length > 0 ? (
                         <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
                             {
                                 filterProducts.map((product) => (
