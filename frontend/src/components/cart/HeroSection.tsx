@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom'
 const HeroSection = () => {
     const dispatch = useAppDispatch()
     // const { delivery_fee } = useAppSelector((state) => state.shop)
-    const { items, totalItems, totalAmount, delivery_fee, total } = useAppSelector((state) => state.cart)
+    const { items, totalItems,totalAmount, delivery_fee, total } = useAppSelector((state) => state.cart)
     return (
         <div className='px-5 md:px-36'>
             <div className='flex flex-col my-10 justify-center items-center text-2xl sm:text-4xl'>

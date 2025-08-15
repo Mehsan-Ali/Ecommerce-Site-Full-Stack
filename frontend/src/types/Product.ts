@@ -30,3 +30,7 @@ export interface AddToCartData {
   price: number
   size: string
 }
+export interface ExtendedCartState extends CartState {
+  isLoading: boolean
+  error: string | null
+}

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { assets, products } from '../../assets/assets'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { addToCart } from '../../store/slice/cartSlice'
+import { addToCart, addtToCartAsync, getCartAsync } from '../../store/slice/cartSlice'
 import type { AddToCartData } from '../../types/Product'
 import { toast } from 'react-toastify'
 
 export default function HeroSection({ id }: { id?: string }) {
     const dispatch = useAppDispatch()
+    const { user } = useAppSelector((state) => state.user)
     const products = useAppSelector(state => state.shop.products)
     const [productData, setProductData] = useState(products)
     const [selectedSize, setSelectedSize] = useState('')
@@ -29,13 +30,31 @@ export default function HeroSection({ id }: { id?: string }) {
     useEffect(() => {
         fetchProduct()
     }, [productId])
-    const handleAddToCart = (data: AddToCartData) => {
+    const handleAddToCart = async (data: AddToCartData) => {
+        if (!user) {
+            toast.error('Please login first')
+            return
+        }
         if (!selectedSize) {
             toast.error('Please select a size')
             return
         }
-        dispatch(addToCart(data))
-        toast.success(`Added to cart`)
+        try {
+            const result = await dispatch(addtToCartAsync({ userId: user._id, itemId: data._id, size: selectedSize }))
+            if (addtToCartAsync.fulfilled.match(result)) {
+                toast.success('Added to cart successfully!')
+                dispatch(addToCart(data))
+                // Refresh cart data
+                dispatch(getCartAsync({ userId: user._id }))
+            } else {
+                toast.error(result.payload as string || 'Failed to add item to cart')
+            }
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error.response?.data?.message || error)
+        }
+        // dispatch(addToCart(data))
+        // toast.success(`Added to cart`)
     }
 
     return (

@@ -1,9 +1,22 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { AddToCartData, CartState } from '../../types/Product'
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction
+} from '@reduxjs/toolkit'
+import type {
+  AddToCartData,
+  CartState,
+  ExtendedCartState
+} from '../../types/Product'
+import { addToCartAPI, getUserCartAPI } from '../../APIs/cartAPI'
 
+interface AddtoCartData {
+  userId: string
+  itemId: string
+  size: string
+}
 const storedCart = localStorage.getItem('cart')
-
-const initialState: CartState = storedCart
+const initialState: ExtendedCartState = storedCart
   ? JSON.parse(storedCart)
   : {
       items: [],
@@ -13,10 +26,49 @@ const initialState: CartState = storedCart
       total: 0
     }
 
+// ---------- Add to cart ----------
+export const addtToCartAsync = createAsyncThunk(
+  'cart/addToCart',
+  async ({ userId, itemId, size }: AddtoCartData) => {
+    try {
+      const result = await addToCartAPI(userId, itemId, size)
+      return result
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+)
+
+// ---------- Get the user cart ----------
+export const getCartAsync = createAsyncThunk(
+  'cart/addToCart',
+  async ({ userId }: { userId: string }) => {
+    try {
+      const result = await getUserCartAPI(userId)
+      return result
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+)
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+    setCartItems: (state, action: PayloadAction<any[]>) => {
+      state.items = action.payload
+      state.totalItems = action.payload.reduce(
+        (sum, item) => sum + item.quantity, 0
+      )
+      state.totalAmount = action.payload.reduce(
+        (sum, item) => sum + item.price * item.quantity, 0
+      )
+      state.total = state.totalAmount + state.delivery_fee
+    },
+    clearError: state => {
+      state.error = null
+    },
     addToCart (state, action: PayloadAction<AddToCartData>) {
       const product = action.payload
       const size = product.size
@@ -49,7 +101,8 @@ const cartSlice = createSlice({
       )
 
       state.totalItems = state.items.reduce(
-        (sum, item) => sum + item.quantity, 0
+        (sum, item) => sum + item.quantity,
+        0
       )
       state.totalAmount = state.items.reduce(
         (sum, item) => sum + item.price * item.quantity,
