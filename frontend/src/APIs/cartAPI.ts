@@ -19,22 +19,22 @@ export const addToCartAPI = async (userId: string, itemId: string, size: string)
 }
 
 // Remove item from cart (decrease quantity by 1)
-// export const removeFromCartAPI = async (userId: string, itemId: string, size: string) => {
-//   try {
-//     const token = localStorage.getItem('token')
-//     const response = await client.post('/api/cart/remove', 
-//       { userId, itemId, size },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`
-//         }
-//       }
-//     )
-//     return response.data
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || 'Failed to remove item from cart')
-//   }
-// }
+export const removeFromCartAPI = async (userId: string, itemId: string, size: string) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await client.post('/api/cart/remove', 
+      { userId, itemId, size },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to remove item from cart')
+  }
+}
 
 // Update cart item quantity
 export const updateCartAPI = async (userId: string, itemId: string, size: string, quantity: number) => {

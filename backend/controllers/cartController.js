@@ -74,3 +74,32 @@ export const getUserCart = async (req, res) => {
         })
     }
 }
+
+export const removeCart = async (req, res) => {
+    try {
+        const { userId, size, itemId } = req.body;
+        if (!userId || !size || !itemId) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        const userData = await userModel.findById(userId);
+        if (!userData) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const cartData = userData.cartData;
+        const cartKey = `${itemId}_${size}`;
+
+        if (cartData[cartKey]) {
+            delete cartData[cartKey];
+            await userModel.findByIdAndUpdate(userId, { cartData });
+            return res.status(200).json({ success: true, message: "Item removed from cart", cartData });
+        } else {
+            return res.status(404).json({ success: false, message: "Item not found in cart" });
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Server error", error: error.message });
+    }
+};

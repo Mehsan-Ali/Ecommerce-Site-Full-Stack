@@ -3,12 +3,13 @@ import {
   createSlice,
   type PayloadAction
 } from '@reduxjs/toolkit'
-import type {
-  AddToCartData,
-  CartState,
-  ExtendedCartState
-} from '../../types/Product'
-import { addToCartAPI, getUserCartAPI, updateCartAPI } from '../../APIs/cartAPI'
+import type { AddToCartData, ExtendedCartState } from '../../types/Product'
+import {
+  addToCartAPI,
+  getUserCartAPI,
+  removeFromCartAPI,
+  updateCartAPI
+} from '../../APIs/cartAPI'
 
 interface AddtoCartData {
   userId: string
@@ -51,7 +52,7 @@ export const getCartAsync = createAsyncThunk(
     }
   }
 )
-// ---------- Get the user cart ----------
+// ---------- Update the user cart ----------
 export const updateCartAsync = createAsyncThunk(
   'cart/addToCart',
   async ({
@@ -73,6 +74,28 @@ export const updateCartAsync = createAsyncThunk(
     }
   }
 )
+
+// ---------- Delete the user cart by size ----------
+export const deleteCartBySizeAsync = createAsyncThunk(
+  'cart/addToCart',
+  async ({
+    userId,
+    itemId,
+    size
+  }: {
+    userId: string
+    itemId: string
+    size: string
+  }) => {
+    try {
+      const result = await removeFromCartAPI(userId, itemId, size)
+      return result
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+)
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -160,15 +183,19 @@ const cartSlice = createSlice({
         0
       )
       state.totalAmount = state.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,0
+        (sum, item) => sum + item.price * item.quantity,
+        0
       )
       state.total = state.totalAmount + state.delivery_fee
       localStorage.setItem('cart', JSON.stringify(state))
     },
-    increaseQuantity (state, action: PayloadAction<{ _id: string; size: string }>) {
+    increaseQuantity (
+      state,
+      action: PayloadAction<{ _id: string; size: string }>
+    ) {
       const { _id, size } = action.payload
-      const item = state.items.find(item => item._id === 
-        _id && item.size === size
+      const item = state.items.find(
+        item => item._id === _id && item.size === size
       )
 
       if (item) {
