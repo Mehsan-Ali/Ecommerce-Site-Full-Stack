@@ -32,6 +32,7 @@ export const Login = () => {
             if (respData.success) {
                 toast.success(respData.message)
                 dispatch(setUser(respData))
+                localStorage.setItem('token', respData.token)
                 console.log(respData)
                 navg('/')
             }
