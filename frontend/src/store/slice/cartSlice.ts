@@ -1,7 +1,8 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { AddToCartData, CartState } from '../../types/Product'
 
 const storedCart = localStorage.getItem('cart')
+
 const initialState: CartState = storedCart
   ? JSON.parse(storedCart)
   : {
