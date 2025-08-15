@@ -42,8 +42,8 @@ export default function HeroSection({ id }: { id?: string }) {
         try {
             const result = await dispatch(addtToCartAsync({ userId: user._id, itemId: data._id, size: selectedSize }))
             if (addtToCartAsync.fulfilled.match(result)) {
-                toast.success('Added to cart successfully!')
                 dispatch(addToCart(data))
+                toast.success('Added to cart successfully!')
                 // Refresh cart data
                 dispatch(getCartAsync({ userId: user._id }))
             } else {
@@ -53,8 +53,6 @@ export default function HeroSection({ id }: { id?: string }) {
             console.log(error)
             toast.error(error.response?.data?.message || error)
         }
-        // dispatch(addToCart(data))
-        // toast.success(`Added to cart`)
     }
 
     return (

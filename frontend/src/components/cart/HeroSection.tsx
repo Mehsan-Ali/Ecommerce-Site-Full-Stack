@@ -8,6 +8,7 @@ const HeroSection = () => {
     const dispatch = useAppDispatch()
     // const { delivery_fee } = useAppSelector((state) => state.shop)
     const { items, totalItems,totalAmount, delivery_fee, total } = useAppSelector((state) => state.cart)
+    
     return (
         <div className='px-5 md:px-36'>
             <div className='flex flex-col my-10 justify-center items-center text-2xl sm:text-4xl'>
@@ -34,24 +35,17 @@ const HeroSection = () => {
                                     </span>
                                     <span className='flex items-center gap-5'>
                                         <h6>Quantity:</h6>
-                                        <span className='border border-gray-500 rounded-md px-5 py-1'>
-                                            {item.quantity}
-                                        </span>
-
-                                        <button onClick={() => dispatch(decreaseQuantity(item))}>
-                                            <MinusCircleIcon />
-                                        </button>
-                                        {/* <span className='flex gap-5 items-center font-semibold px-2'>
-                                            <button onClick={() => dispatch(increaseQuantity(item._id))}>
+                                        <span className='flex gap-5 items-center font-semibold px-2'>
+                                            <button onClick={() => dispatch(increaseQuantity(item))}>
                                                 <PlusCircle />
                                             </button>
                                             <span className='border border-gray-500 rounded-md px-5 py-1'>
                                                 {item.quantity}
                                             </span>
-                                            <button onClick={() => dispatch(decreaseQuantity(item._id))}>
+                                            <button onClick={() => dispatch(decreaseQuantity(item))}>
                                                 <MinusCircleIcon />
                                             </button>
-                                        </span> */}
+                                        </span>
                                     </span>
                                     <span className='flex justify-between items-center'>
                                         <h6 className='text-green-600'>In Stock</h6>

@@ -8,7 +8,7 @@ import type {
   CartState,
   ExtendedCartState
 } from '../../types/Product'
-import { addToCartAPI, getUserCartAPI } from '../../APIs/cartAPI'
+import { addToCartAPI, getUserCartAPI, updateCartAPI } from '../../APIs/cartAPI'
 
 interface AddtoCartData {
   userId: string
@@ -51,7 +51,28 @@ export const getCartAsync = createAsyncThunk(
     }
   }
 )
-
+// ---------- Get the user cart ----------
+export const updateCartAsync = createAsyncThunk(
+  'cart/addToCart',
+  async ({
+    userId,
+    itemId,
+    size,
+    quantity
+  }: {
+    userId: string
+    itemId: string
+    size: string
+    quantity: number
+  }) => {
+    try {
+      const result = await updateCartAPI(userId, itemId, size, quantity)
+      return result
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+)
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -59,10 +80,12 @@ const cartSlice = createSlice({
     setCartItems: (state, action: PayloadAction<any[]>) => {
       state.items = action.payload
       state.totalItems = action.payload.reduce(
-        (sum, item) => sum + item.quantity, 0
+        (sum, item) => sum + item.quantity,
+        0
       )
       state.totalAmount = action.payload.reduce(
-        (sum, item) => sum + item.price * item.quantity, 0
+        (sum, item) => sum + item.price * item.quantity,
+        0
       )
       state.total = state.totalAmount + state.delivery_fee
     },
@@ -108,21 +131,10 @@ const cartSlice = createSlice({
         (sum, item) => sum + item.price * item.quantity,
         0
       )
+      state.total = state.totalAmount + state.delivery_fee
 
       localStorage.setItem('cart', JSON.stringify(state))
     },
-    // removeFromCart (state, action: PayloadAction<string>) {
-    //   const productId = action.payload
-    //   // const size
-    //   const existingItem = state.items.find(item => item._id === productId)
-
-    //   if (existingItem) {
-    //     state.totalItems -= existingItem.quantity
-    //     state.totalAmount -= existingItem.price * existingItem.quantity
-    //     state.items = state.items.filter(item => item._id !== productId)
-    //   }
-    //   localStorage.setItem('cart', JSON.stringify(state))
-    // },
     decreaseQuantity (
       state,
       action: PayloadAction<{ _id: string; size: string }>
@@ -148,80 +160,32 @@ const cartSlice = createSlice({
         0
       )
       state.totalAmount = state.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
+        (sum, item) => sum + item.price * item.quantity,0
       )
+      state.total = state.totalAmount + state.delivery_fee
       localStorage.setItem('cart', JSON.stringify(state))
     },
-    // decreaseQuantity (state, action: PayloadAction<string>) {
-    //   const productId = action.payload
-    //   const item = state.items.find(item => item._id === productId)
-
-    //   if (item) {
-    //     if (item.quantity > 1) {
-    //       item.size = item.size.slice(0, -1)
-    //       item.quantity -= 1
-    //       state.totalItems -= 1
-    //       state.totalAmount -= item.price
-    //     } else {
-    //       // if quantity is 1, remove the item entirely
-    //       state.items = state.items.filter(i => i._id !== productId)
-    //       state.totalItems -= 1
-    //       state.totalAmount -= item.price
-    //     }
-    //   }
-    //   localStorage.setItem('cart', JSON.stringify(state))
-    // },
-    increaseQuantity (state, action: PayloadAction<string>) {
-      const productId = action.payload
-      const item = state.items.find(item => item._id === productId)
+    increaseQuantity (state, action: PayloadAction<{ _id: string; size: string }>) {
+      const { _id, size } = action.payload
+      const item = state.items.find(item => item._id === 
+        _id && item.size === size
+      )
 
       if (item) {
         if (item.quantity > 0) {
-          item.size += item.size.slice(-1)
           item.quantity += 1
           state.totalItems += 1
           state.totalAmount += item.price
+          state.total = state.totalAmount + state.delivery_fee
         } else {
           // if quantity is 1, remove the item entirely
-          state.items = state.items.filter(i => i._id !== productId)
+          state.items = state.items.filter(i => i._id !== _id)
           state.totalItems -= 1
           state.totalAmount -= item.price
         }
       }
       localStorage.setItem('cart', JSON.stringify(state))
     },
-    // decreaseQuantity (
-    //   state,
-    //   action: PayloadAction<{ _id: string; size: string }>
-    // ) {
-    //   const { _id, size } = action.payload
-
-    //   const item = state.items.find(
-    //     item => item._id === _id && item.size === size
-    //   )
-
-    //   if (!item) return
-
-    //   if (item.quantity > 1) {
-    //     item.quantity -= 1
-    //   } else {
-    //     state.items = state.items.filter(
-    //       i => !(i._id === _id && i.size === size)
-    //     )
-    //   }
-
-    //   state.totalItems = state.items.reduce(
-    //     (sum, item) => sum + item.quantity,
-    //     0
-    //   )
-    //   state.totalAmount = state.items.reduce(
-    //     (sum, item) => sum + item.price * item.quantity,
-    //     0
-    //   )
-
-    //   localStorage.setItem('cart', JSON.stringify(state))
-    // },
     clearCart (state) {
       state.items = []
       state.totalAmount = 0
