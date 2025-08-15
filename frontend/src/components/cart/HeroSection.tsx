@@ -36,13 +36,13 @@ const HeroSection = () => {
                                     <span className='flex items-center gap-5'>
                                         <h6>Quantity:</h6>
                                         <span className='flex gap-5 items-center font-semibold px-2'>
-                                            <button onClick={() => dispatch(increaseQuantity(item))}>
+                                            <button className='p-2 rounded-md text-gray-50 bg-green-600/90 cursor-pointer' onClick={() => dispatch(increaseQuantity(item))}>
                                                 <PlusCircle />
                                             </button>
                                             <span className='border border-gray-500 rounded-md px-5 py-1'>
                                                 {item.quantity}
                                             </span>
-                                            <button onClick={() => dispatch(decreaseQuantity(item))}>
+                                            <button className='text-gray-50 bg-red-600 p-2 rounded-md cursor-pointer' onClick={() => dispatch(decreaseQuantity(item))}>
                                                 <MinusCircleIcon />
                                             </button>
                                         </span>
