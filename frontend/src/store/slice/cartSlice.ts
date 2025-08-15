@@ -30,9 +30,9 @@ const cartSlice = createSlice({
         state.items.push({ ...product, size, quantity: 1 })
       }
       state.totalItems += 1
-      state.totalAmount += product.price 
+      state.totalAmount += product.price
       state.total = state.totalAmount + state.delivery_fee
-      
+
       // Save to localStorage
       localStorage.setItem('cart', JSON.stringify(state))
     },
@@ -48,8 +48,7 @@ const cartSlice = createSlice({
       )
 
       state.totalItems = state.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
+        (sum, item) => sum + item.quantity, 0
       )
       state.totalAmount = state.items.reduce(
         (sum, item) => sum + item.price * item.quantity,
@@ -91,7 +90,8 @@ const cartSlice = createSlice({
       }
 
       state.totalItems = state.items.reduce(
-        (sum, item) => sum + item.quantity,0
+        (sum, item) => sum + item.quantity,
+        0
       )
       state.totalAmount = state.items.reduce(
         (sum, item) => sum + item.price * item.quantity,

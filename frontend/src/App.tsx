@@ -25,14 +25,24 @@ function App() {
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem('token')
+       
+      // Only make API call if token exists and is not null/empty
+      if (!token || token === 'null' || token === 'undefined') {
+        console.log('No valid token found, skipping user fetch')
+        return
+      }
+      
       const resp = await client.get('/api/user/user', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
       dispatch(setUser(resp.data))
-      console.log(resp.data)
     } catch (error: any) {
+      // If token is invalid, remove it from localStorage
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token')
+      }
       console.log(error.message)
     }
   }

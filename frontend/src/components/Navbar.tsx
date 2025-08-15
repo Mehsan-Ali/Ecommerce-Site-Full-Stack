@@ -3,6 +3,7 @@ import { assets } from '../assets/assets'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setShowSearch } from '../store/slice/shopSlice'
+import { clearUser } from '../store/slice/userSlice'
 const NavgPage = [
     {
         id: 1,
@@ -26,16 +27,23 @@ const NavgPage = [
     }
 ]
 export const Navbar = () => {
+    const { user } = useAppSelector((state) => state.user)
     const cart = useAppSelector((state) => state.cart.totalItems)
     const navg = useNavigate()
     const dispatch = useAppDispatch()
     const { showSearch } = useAppSelector((state) => state.shop)
+    const [cartItem, setCartItem] = useState(0)
     const [visible, setVisible] = useState(false)
     const toggleButn = () => {
         navg('/collection')
         dispatch(setShowSearch(!showSearch))
     }
-    const [cartItem, setCartItem] = useState(0)
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        dispatch(clearUser())
+        navg('/')
+    }
+    
     useEffect(() => {
         setCartItem(cart)
     }, [cart])
@@ -66,10 +74,16 @@ export const Navbar = () => {
                         <img src={assets.profile_icon} alt="" className='w-ssm sm:w-slg cursor-pointer' />
                         <div className='group-hover:block hidden dropdown-menu absolute pt-4 right-0 shadow-lg rounded-md'>
                             <div className='flex flex-col gap-2 w-36 py-2 px-5 bg-slate-200 text-gray-500'>
-                                <NavLink to='/login' className='hover:text-gray-900'>Login</NavLink>
-                                <NavLink to='/cart' className='hover:text-gray-900'>Cart</NavLink>
-                                <NavLink to='/orders' className='hover:text-gray-900'>Orders</NavLink>
-                                <NavLink to='/place-order' className='hover:text-gray-900'>Place Order</NavLink>
+                                {
+                                    user ? (
+                                        <>
+                                            <NavLink to='/profile' className='hover:text-gray-900'>Profile</NavLink>
+                                            <NavLink to='/orders' className='hover:text-gray-900'>Orders</NavLink>
+                                            <p onClick={handleLogout} className='cursor-pointer hover:text-gray-900'>Logout</p>
+                                        </>
+                                    ) :
+                                        <NavLink to='/login' className='hover:text-gray-900'>Login</NavLink>
+                                }
                             </div>
                         </div>
                     </div>
@@ -79,6 +93,7 @@ export const Navbar = () => {
                     </NavLink>
                     <img src={assets.menu_icon} alt="" onClick={() => setVisible(!visible)} className='min-w-5 w-5 cursor-pointer flex md:hidden' />
 
+                    {/* ---------------------- Mobile Screen --------------------- */}
                     <div className={`fixed top-0 right-0 w-full h-full bg-white transition-all duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'} md:hidden font-bold`}>
                         <div className='flex items-center gap-3 py-5 px-3 cursor-pointer' onClick={() => setVisible(false)}>
                             <img src={assets.dropdown_icon} alt="" className='rotate-180 w-2' />
