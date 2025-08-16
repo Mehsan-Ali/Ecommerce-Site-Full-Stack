@@ -53,11 +53,14 @@ export const allOrders = (req, res) => {
 }
 
 // ---------- User Orders ------------
-export const userOrders = (req, res) => {
+export const userOrders = async (req, res) => {
     try {
-
+        const { userId } = req.body
+        const userOrders = await orderModel.find({ userId })
+        res.status(200).json({ success: true, message: "User Orders", userOrders })
     } catch (error) {
-
+        console.log(error)
+        res.status(500).json({ success: false, message: error })
     }
 }
 

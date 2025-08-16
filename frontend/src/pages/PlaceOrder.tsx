@@ -58,8 +58,9 @@ export const PlaceOrder = () => {
                             dispatch(clearCart())
                             reset()
                         }
-                    } catch (error) {
+                    } catch (error: any) {
                         console.log(error)
+                        toast.error(error.response?.data?.message)
                     }
                     break;
             
