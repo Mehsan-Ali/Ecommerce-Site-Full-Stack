@@ -37,7 +37,7 @@ export const PlaceOrder = () => {
             const order = {
                 userId: user._id,
                 items: orderItems,
-                amount: totalAmount,
+                amount: totalAmount + delivery_fee,
                 address: data,
                 paymentMethod: method,
                 payment: false,
