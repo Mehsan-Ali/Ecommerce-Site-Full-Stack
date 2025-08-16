@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Title } from '../components/Title'
 import { useAppSelector } from '../store/hooks'
 
 export const Orders = () => {
     const { items } = useAppSelector((state) => state.cart)
+    
     const { currency } = useAppSelector((state) => state.shop)
+
+    // useEffect(() => {
+        
+    // },)
     return (
         <div className='py-10 px-5 md:px-20'>
             <div className='text-xl sm:text-2xl uppercase py-5'>

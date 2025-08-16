@@ -11,27 +11,29 @@ import { PlaceOrder } from './pages/PlaceOrder'
 import { Orders } from './pages/Orders'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
-import { ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Signup } from './pages/Signup'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import { useEffect } from 'react'
 import { fetchProducts } from './store/slice/shopSlice'
 import { client } from './APIs/client'
+import { setLoading, setOrders } from './store/slice/orderSlice'
 import { setUser } from './store/slice/userSlice'
 
 function App() {
+  const { user, token } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem('token')
-       
+
       // Only make API call if token exists and is not null/empty
       if (!token || token === 'null' || token === 'undefined') {
         console.log('No valid token found, skipping user fetch')
         return
       }
-      
+
       const resp = await client.get('/api/user/user', {
         headers: {
           Authorization: `Bearer ${token}`
@@ -46,11 +48,39 @@ function App() {
       console.log(error.message)
     }
   }
-  
+  const fetchUserOrder = async () => {
+    dispatch(setLoading(true))
+    if (!user) {
+      return
+    }
+    const userId = user._id
+    try {
+      const resp = await client.post('/api/order/user-orders', { userId }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const orderData = resp.data
+      if (orderData.success) {
+        dispatch(setOrders(orderData.userOrders))
+        console.log(orderData)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      dispatch(setLoading(false))
+    }
+  }
   useEffect(() => {
-    dispatch(fetchProducts())
-    fetchUser()
-  }, [dispatch, fetchUser])
+    dispatch(fetchProducts());
+    fetchUser();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserOrder();
+    }
+  }, [user]);
 
   const RedirectAuthenticatedUser = ({ children }: any) => {
     const { user } = useAppSelector((state) => state.user)
