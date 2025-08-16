@@ -1,0 +1,71 @@
+import orderModel from "../models/orderModel.js"
+import userModel from "../models/userModel.js"
+
+// -------------- Only Cash on Delivery Order --------------
+export const placeOrder = async (req, res) => {
+    try {
+        const { userId, items, amount, address } = req.body
+        const orderData = {
+            userId,
+            items,
+            amount,
+            address,
+            paymentMethod: "COD",
+            payment:false,
+            date: Date.now(),
+        }
+        const order = new orderModel(orderData)
+        await order.save()
+        await userModel.findByIdAndUpdate(userId, { cartData: {} })
+        await userModel.findByIdAndUpdate({ _id: userId }, { $push: { orders: order } }).exec()
+        res.status(200).json({ success: true, message: "Order Placed Successfully" })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: error || "Something went wrong in placing order" })
+    }
+}
+
+// ---------- Only Stripe Order ------------
+export const placeOrderStrip = (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+// ---------- Only Razor pay Order ------------
+export const placeOrderRazorpay = (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+// ---------- All Orders ------------
+export const allOrders = (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+// ---------- User Orders ------------
+export const userOrders = (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+// ---------- Update Status User Orders from Admin Only ------------
+export const updateStatusOrder = (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+}

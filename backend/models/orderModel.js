@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
 const orderSchema = new Schema({
-    userId: {
+    userId: {   
         type: String,
         required: true,
     },
@@ -14,7 +14,7 @@ const orderSchema = new Schema({
         required: true
     },
     address: {
-        type: String,
+        type: Object,
         required: true
     },
     status: {

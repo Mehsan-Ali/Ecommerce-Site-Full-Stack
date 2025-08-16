@@ -85,11 +85,11 @@ export const AdminLogin = async (req, res) => {
 export const UserData = async (req, res) => {
     try {
         const token = req.headers.token || req.headers.authorization?.split(' ')[1]
-        if(!token) return res.status(400).json({ success: false, message: "No token provided" })
+        if (!token) return res.status(400).json({ success: false, message: "No token provided" })
         const decode = jwt.verify(token, process.env.JWT_SECRET_KEY)
         if (!decode) return res.status(400).json({ success: false, message: "Invalid Token" })
         const user = await userModel.findById(decode.id)
-        return res.status(200).json({ success: true, message: "User Data", user })
+        return res.status(200).json({ success: true, message: "User Data", user, token })
     } catch (error) {
         console.log(error)
         res.status(500).json({ success: false, message: error })

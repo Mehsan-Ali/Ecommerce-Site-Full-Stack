@@ -1,69 +1,160 @@
 import { useState } from 'react'
 import { assets } from '../assets/assets'
+import { useForm } from 'react-hook-form'
 import { Title } from '../components/Title'
-import { useAppSelector } from '../store/hooks'
-import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { type OrderFormData, orderFormSchema } from '../utils/orderFormValidate'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { client } from '../APIs/client'
+import { toast } from 'react-toastify'
+import { clearCart } from '../store/slice/cartSlice'
 
 export const PlaceOrder = () => {
-    const { totalAmount, delivery_fee, total } = useAppSelector((state) => state.cart)
+    const dispatch = useAppDispatch()
+    const { handleSubmit, register, reset, formState: { errors } } = useForm<OrderFormData>({ resolver: zodResolver(orderFormSchema) })
+    const { token, user } = useAppSelector((state) => state.user)
+    const { totalAmount, delivery_fee, total, items } = useAppSelector((state) => state.cart)
     const [method, setMethod] = useState('cod')
-    const navigate = useNavigate()
+
+    const submitData = async (data: OrderFormData) => {
+        if(!user) return alert('User not found')
+        try {
+            let orderItems = []
+            // console.log(data)
+            for (let i = 0; i < items.length; i++) {
+                orderItems.push({
+                    productId: items[i]._id,
+                    title: items[i].name,
+                    itemImage: items[i].image,
+                    itemPrice: items[i].price,
+                    quantity: items[i].quantity,
+                    size: items[i].size,
+                    category: items[i].category,
+                    subCategory: items[i].subCategory,
+                    bestSeller: items[i].bestSeller
+                })
+            }
+            const order = {
+                userId: user._id,
+                items: orderItems,
+                amount: totalAmount,
+                address: data,
+                paymentMethod: method,
+                payment: false,
+                date: Date.now()
+            }
+            switch (method) {
+                // ------ Api Call for COD ------
+                case 'cod':
+                    try {
+                        const resp = await client.post('/api/order/place', order, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        if(resp.data.success){
+                            toast.success(resp.data.message)
+                            console.log(resp.data)
+                            dispatch(clearCart())
+                            reset()
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+            console.log(order)
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
-        <div className='flex flex-wrap md:flex-nowrap gap-15 mx-5 sm:mx-14 md:mx-20 py-10'>
+        <form onSubmit={handleSubmit(submitData)} className='flex flex-wrap md:flex-nowrap gap-15 mx-5 sm:mx-14 md:mx-20 py-10'>
+            {/* <div>
+                {items.map((item, index) => (
+                    <div key={index} className='flex flex-col gap-5'>
+                        <div className='flex gap-5'>
+                            <img src={item.image} alt="" className='w-20' />
+                            <div className='flex flex-col gap-1'>
+                                <p className='text-sm sm:text-base'>{item.name}</p>
+                                <p className='text-sm sm:text-base'>Quantity: {item.quantity}</p>
+                                <p className='text-sm sm:text-base'>Size: {item.size}</p>
+                            </div>
+                        </div>
+                        <div className='flex justify-between'>
+                            <p className='text-sm sm:text-base'>{item.price}</p>
+                            <p className='text-sm sm:text-base'>{item.price * item.quantity}</p>
+                        </div>
+                    </div>
+                ))}
+            </div> */}
             {/* --------------- Delivery Info --------------- */}
             <div className='flex-1/2 flex flex-col gap-5'>
                 <div className='text-lg sm:text-2xl uppercase'>
                     <Title text1='Delivery' text2='Information' />
                 </div>
 
-                <form action="" className='text-gray-600 space-y-2 text-xs sm:text-sm'>
+                <div className='text-gray-600 space-y-2 text-xs sm:text-sm'>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="firstName">First Name</label>
-                            <input type="text" name="firstName" id="firstName" placeholder='Enter Your Name' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('firstName')} type="text" id="firstName" placeholder='Enter Your Name' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.firstName && <p className='text-red-500 text-xs'>{errors.firstName.message}</p>}
                         </div>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="lastName">Last Name</label>
-                            <input type="text" name="lastName" id="lastName" placeholder='Enter Your Name' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('lastName')} type="text" name="lastName" id="lastName" placeholder='Enter Your Name' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.lastName && <p className='text-red-500 text-xs'>{errors.lastName.message}</p>}
                         </div>
                     </div>
 
                     <div className='flex flex-col gap-1'>
                         <label htmlFor="email">Email</label>
-                        <input type="text" name="email" id="email" placeholder='Enter Your Email' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        <input {...register('email')} type="text" name="email" id="email" placeholder='Enter Your Email' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        {errors.email && <p className='text-red-500 text-xs'>{errors.email.message}</p>}
                     </div>
                     <div className='flex flex-col gap-1'>
                         <label htmlFor="address">Address</label>
-                        <input type="text" name="address" id="address" placeholder='Enter Your Address' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        <input {...register('address')} type="text" name="address" id="address" placeholder='Enter Your Address' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        {errors.address && <p className='text-red-500 text-xs'>{errors.address.message}</p>}
                     </div>
 
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="city">City</label>
-                            <input type="text" name="city" id="city" placeholder='Enter Your City' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('city')} type="text" name="city" id="city" placeholder='Enter Your City' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.city && <p className='text-red-500 text-xs'>{errors.city.message}</p>}
                         </div>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="state">State</label>
-                            <input type="text" name="state" id="state" placeholder='Enter Your State' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('state')} type="text" name="state" id="state" placeholder='Enter Your State' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.state && <p className='text-red-500 text-xs'>{errors.state.message}</p>}
                         </div>
                     </div>
 
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="zipcode">Zip Code</label>
-                            <input type="text" name="city" id="city" placeholder='Enter Your zip code' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('zipCode')} type="text" name="zipCode" id="zipCode" placeholder='Enter Your zip code' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.zipCode && <p className='text-red-500 text-xs'>{errors.zipCode.message}</p>}
                         </div>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="country">Country</label>
-                            <input type="text" name="country" id="country" placeholder='Enter Your Country' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            <input {...register('country')} type="text" name="country" id="country" placeholder='Enter Your Country' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                            {errors.country && <p className='text-red-500 text-xs'>{errors.country.message}</p>}
                         </div>
                     </div>
 
                     <div className='flex flex-col gap-1'>
                         <label htmlFor="phoneNumber">Phone Number</label>
-                        <input type="text" name="phoneNumber" id="phoneNumber" placeholder='Enter Your Phone Number' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        <input {...register('phoneNumber')} type="text" name="phoneNumber" id="phoneNumber" placeholder='Enter Your Phone Number' className='border border-gray-200 outline-none px-3 py-2 w-full' />
+                        {errors.phoneNumber && <p className='text-red-500 text-xs'>{errors.phoneNumber.message}</p>}
                     </div>
-                </form>
+                </div>
             </div>
             {/* --------------- Cart Info --------------- */}
             <div className='grow flex-1/2 flex-col gap-5'>
@@ -101,7 +192,7 @@ export const PlaceOrder = () => {
                     {
                         method === 'cod' ?
                             <div className='flex justify-end py-5 '>
-                                <button onClick={() => navigate('/orders')} className='bg-black my-auto py-2 w-1/2 cursor-pointer rounded-sm uppercase text-white'>
+                                <button type='submit' className='bg-black my-auto py-2 w-1/2 cursor-pointer rounded-sm uppercase text-white'>
                                     Place order
                                 </button>
                             </div> : null
@@ -109,6 +200,6 @@ export const PlaceOrder = () => {
 
                 </div>
             </div>
-        </div>
+        </form>
     )
 }

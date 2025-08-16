@@ -29,6 +29,9 @@ export interface AddToCartData {
   image: string
   price: number
   size: string
+  subCategory: string
+  category: string
+  bestSeller: boolean
 }
 export interface ExtendedCartState extends CartState {
   isLoading: boolean

@@ -2,7 +2,7 @@ import { assets } from '../assets/assets'
 import { useAppSelector } from '../store/hooks'
 
 const Hero = () => {
-    const {user} = useAppSelector((state) => state.user)
+    const { user } = useAppSelector((state) => state.user)
     return (
         <div className='flex flex-col sm:flex-row border border-gray-400 mx-5 sm:mx-14 md:mx-20 lg:mx-36'>
             {user?.name}

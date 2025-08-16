@@ -157,7 +157,7 @@ export default function HeroSection({ id }: { id?: string }) {
 
                             <button
                                 className="w-full bg-black text-white py-4 px-8 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors duration-200"
-                                onClick={() => handleAddToCart({ _id: item._id, name: item.name, image: item.image[selectedImage], price: item.price, size: selectedSize })}
+                                onClick={() => handleAddToCart({ _id: item._id, name: item.name, image: item.image[selectedImage], price: item.price, size: selectedSize, bestSeller: item.bestSeller, subCategory: item.subCategory, category: item.category })}
                             >
                                 ADD TO CART
                             </button>
