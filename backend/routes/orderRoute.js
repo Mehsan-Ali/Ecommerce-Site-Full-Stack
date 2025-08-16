@@ -5,7 +5,7 @@ import adminAuth from '../middleware/adminAuth.js'
 
 const router = express.Router()
 // Admin Features
-router.post('/list',adminAuth, allOrders)
+router.get('/list',allOrders)
 router.post('/status',adminAuth, updateStatusOrder)
 
 // Payment Features

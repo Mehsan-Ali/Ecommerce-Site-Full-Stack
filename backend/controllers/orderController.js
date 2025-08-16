@@ -44,12 +44,14 @@ export const placeOrderRazorpay = (req, res) => {
 }
 
 // ---------- All Orders ------------
-export const allOrders = (req, res) => {
+export const allOrders = async (req, res) => {
     try {
-
+        const allOrders = await orderModel.find({})
+        res.status(200).json({ success: true, message: "All Orders", allOrders })
     } catch (error) {
-
-    }
+        console.log(error)
+        res.status(500).json({ success: false, message: error })
+    }   
 }
 
 // ---------- User Orders ------------
