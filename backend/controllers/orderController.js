@@ -69,8 +69,13 @@ export const userOrders = async (req, res) => {
 // ---------- Update Status User Orders from Admin Only ------------
 export const updateStatusOrder = (req, res) => {
     try {
-
+        const { orderId, status } = req.body
+        const order = orderModel.findById(orderId)
+        order.status = status
+        order.save()
+        res.status(200).json({ success: true, message: "Order Status Updated Successfully" })
     } catch (error) {
-
+        console.log(error)
+        res.status(500).json({ success: false, message: error })
     }
 }
