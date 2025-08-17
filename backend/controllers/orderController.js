@@ -71,6 +71,7 @@ export const updateStatusOrder = (req, res) => {
     try {
         const { orderId, status } = req.body
         const order = orderModel.findById(orderId)
+        if(!order) return res.status(404).json({ success: false, message: "Order not found" })
         order.status = status
         order.save()
         res.status(200).json({ success: true, message: "Order Status Updated Successfully" })
