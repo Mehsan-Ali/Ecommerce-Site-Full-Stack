@@ -1,9 +1,12 @@
 import axios from "axios"
-import React, { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { backednUrl } from "../App"
+import { toast } from "react-toastify"
 
 const Orders = ({ token }: { token: string }) => {
 	const [orderList, setOrderList] = useState<any[]>([])
+	const [status, setStatus] = useState<string>("")
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const fetchOrders = useCallback(async () => {
 		try {
@@ -20,7 +23,29 @@ const Orders = ({ token }: { token: string }) => {
 			console.log(error)
 		}
 	}, [token])
-
+	console.log(status)
+	const updateOrderStatus = async (orderId: string, e: React.FormEvent) => {
+		setIsLoading(true)
+		e.preventDefault()
+		try {
+			const resp = await axios.patch(`${backednUrl}/api/order/status`, { orderId, status }, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			const data = resp.data
+			if(data.success) {
+				await fetchOrders()
+				toast.success(data.message)
+			}
+			console.log(data)
+		} catch (error:any) {
+			toast.error(error.response?.data?.message)
+			console.log(error)
+		} finally {
+			setIsLoading(false)
+		}
+	}
 	useEffect(() => {
 		fetchOrders()
 	}, [fetchOrders])
@@ -45,14 +70,18 @@ const Orders = ({ token }: { token: string }) => {
 										{order._id}
 									</span>
 								</h3>
-								<select value={order.status} className="px-3 py-2 text-sm rounded-sm bg-blue-50 text-blue-700 outline-none">
-									{/* {order.status} */}
-									<option value={order.status}>Order Placed</option>
-									<option value="Processing">Processig</option>
-									<option value="Shipped">Shipped</option>
-									<option value="Out For Delivery">Out For Delivery</option>
-									<option value="Delivered">Delivered</option>
-								</select>
+								<form className="flex flex-col gap-2" onSubmit={(e) => updateOrderStatus(order._id, e)}>
+									<select defaultValue={order.status} onChange={(e) => setStatus(e.target.value)} className="px-3 py-2 text-sm sm:text-base rounded-sm bg-blue-50 text-blue-700 outline-none">
+										<option value="Order Placed">Order Placed</option>
+										<option value="Processing">Processing</option>
+										<option value="Shipped">Shipped</option>
+										<option value="Out For Delivery">Out For Delivery</option>
+										<option value="Delivered">Delivered</option>
+									</select>
+									<button disabled={isLoading} type="submit" className={`px-3 py-2 text-sm rounded-sm bg-blue-50 text-blue-700 cursor-pointer`}>
+										Update Status
+									</button>
+								</form>
 							</div>
 
 							{/* Items */}
