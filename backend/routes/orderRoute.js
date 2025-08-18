@@ -5,15 +5,15 @@ import adminAuth from '../middleware/adminAuth.js'
 
 const router = express.Router()
 // Admin Features
-router.get('/list',allOrders)
-router.patch('/status', updateStatusOrder)
+router.get('/list', adminAuth, allOrders)
+router.patch('/status', adminAuth, updateStatusOrder)
 
 // Payment Features
-router.post('/place',verifyUser, placeOrder)
-router.post('/stripe',verifyUser, placeOrderStrip)
-router.post('/razorpay',verifyUser, placeOrderRazorpay)
+router.post('/place', verifyUser, placeOrder)
+router.post('/stripe', verifyUser, placeOrderStrip)
+router.post('/razorpay', verifyUser, placeOrderRazorpay)
 
 // User Feature
-router.post('/user-orders',verifyUser, userOrders)
+router.post('/user-orders', verifyUser, userOrders)
 
 export default router
