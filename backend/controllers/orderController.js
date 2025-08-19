@@ -1,6 +1,8 @@
 import orderModel from "../models/orderModel.js"
 import userModel from "../models/userModel.js"
+import Stripe from "stripe"
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 // -------------- Only Cash on Delivery Order --------------
 export const placeOrder = async (req, res) => {
     try {
@@ -11,7 +13,7 @@ export const placeOrder = async (req, res) => {
             amount,
             address,
             paymentMethod: "COD",
-            payment:false,
+            payment: false,
             date: Date.now(),
         }
         const order = new orderModel(orderData)
@@ -28,6 +30,7 @@ export const placeOrder = async (req, res) => {
 // ---------- Only Stripe Order ------------
 export const placeOrderStrip = (req, res) => {
     try {
+        const { userId, items, amount, address } = req.body
 
     } catch (error) {
 
@@ -51,7 +54,7 @@ export const allOrders = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ success: false, message: error })
-    }   
+    }
 }
 
 // ---------- User Orders ------------
@@ -71,7 +74,7 @@ export const updateStatusOrder = async (req, res) => {
     try {
         const { orderId, status } = req.body
         const order = await orderModel.findById(orderId)
-        if(!order) return res.status(404).json({ success: false, message: "Order not found" })
+        if (!order) return res.status(404).json({ success: false, message: "Order not found" })
         order.status = status
         await order.save()
         res.status(200).json({ success: true, message: "Order Status Updated Successfully" })
