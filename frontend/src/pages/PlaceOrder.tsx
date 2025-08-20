@@ -73,7 +73,6 @@ export const PlaceOrder = () => {
                         })
                         if (respose.data.success) {
                             const { session_url } = respose.data
-                            // window.location.href = respose.data.url
                             window.location.replace(session_url)
                         } else {
                             toast.error(respose.data.message)

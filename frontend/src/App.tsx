@@ -20,6 +20,7 @@ import { fetchProducts } from './store/slice/shopSlice'
 import { client } from './APIs/client'
 import { setLoading, setOrders } from './store/slice/orderSlice'
 import { setUser } from './store/slice/userSlice'
+import Verify from './pages/Verify'
 
 function App() {
   const { user, token } = useAppSelector((state) => state.user)
@@ -102,6 +103,8 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/place-order' element={<PlaceOrder />} />
         <Route path='/orders' element={<Orders />} />
+
+        <Route path='/verify' element={<Verify />} />
 
         {/* --------- Login ----------- */}
         <Route path='/login' element={
