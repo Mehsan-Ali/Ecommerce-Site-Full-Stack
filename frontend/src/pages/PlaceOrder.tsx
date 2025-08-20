@@ -17,7 +17,7 @@ export const PlaceOrder = () => {
     const [method, setMethod] = useState('cod')
 
     const submitData = async (data: OrderFormData) => {
-        if(!user) return alert('User not found')
+        if (!user) return alert('User not found')
         try {
             let orderItems = []
             // console.log(data)
@@ -52,7 +52,7 @@ export const PlaceOrder = () => {
                                 Authorization: `Bearer ${token}`
                             }
                         })
-                        if(resp.data.success){
+                        if (resp.data.success) {
                             toast.success(resp.data.message)
                             console.log(resp.data)
                             dispatch(clearCart())
@@ -63,12 +63,31 @@ export const PlaceOrder = () => {
                         toast.error(error.response?.data?.message)
                     }
                     break;
-            
+
+                case 'stripe':
+                    try {
+                        const respose = await client.post('/api/order/stripe', order, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        if (respose.data.success) {
+                            const { session_url } = respose.data
+                            // window.location.href = respose.data.url
+                            window.location.replace(session_url)
+                        } else {
+                            toast.error(respose.data.message)
+                            console.log(respose.data)
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
                 default:
                     break;
             }
             console.log(order)
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -190,14 +209,11 @@ export const PlaceOrder = () => {
                             <p className='text-gray-600 font-medium'>CASH ON DELIVERY</p>
                         </div>
                     </div>
-                    {
-                        method === 'cod' ?
-                            <div className='flex justify-end py-5 '>
-                                <button type='submit' className='bg-black my-auto py-2 w-1/2 cursor-pointer rounded-sm uppercase text-white'>
-                                    Place order
-                                </button>
-                            </div> : null
-                    }
+                    <div className='flex justify-end py-5 '>
+                        <button type='submit' className='bg-black my-auto py-2 w-1/2 cursor-pointer rounded-sm uppercase text-white'>
+                            Place order
+                        </button>
+                    </div>
 
                 </div>
             </div>
