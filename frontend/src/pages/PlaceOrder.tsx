@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
 import { useForm } from 'react-hook-form'
 import { Title } from '../components/Title'
@@ -16,6 +16,9 @@ export const PlaceOrder = () => {
     const { totalAmount, delivery_fee, total, items } = useAppSelector((state) => state.cart)
     const [method, setMethod] = useState('cod')
 
+    useEffect(() => {
+        console.log("Payment method changed:", method);
+    }, [method]);
     const submitData = async (data: OrderFormData) => {
         if (!user) return alert('User not found')
         try {

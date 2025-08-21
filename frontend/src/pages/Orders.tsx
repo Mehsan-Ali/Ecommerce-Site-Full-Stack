@@ -1,4 +1,3 @@
-import React from 'react'
 import { Title } from '../components/Title'
 import { useAppSelector } from '../store/hooks'
 
@@ -38,7 +37,7 @@ export const Orders = () => {
                                         </span>
                                     </p>
                                     <p className="text-sm text-gray-800 font-medium">
-                                        Payment: <span className='font-normal text-gray-500'>{order.paymentMethod === "COD" ? "Cash on Delivery" : "Online Payment"}</span>
+                                        Payment: <span className='font-normal text-gray-500 capitalize'>{order.paymentMethod === "COD" ? "Cash on Delivery" : order.paymentMethod}</span>
                                     </p>
                                 </div>
                                 <div className="text-right">

@@ -32,14 +32,14 @@ export const placeOrder = async (req, res) => {
 // ---------- Only Stripe Order ------------
 export const placeOrderStrip = async (req, res) => {
     try {
-        const { userId, items, amount, address } = req.body
+        const { userId, items, amount, address, paymentMethod } = req.body
         const { origin } = req.headers // Client side Url 
         const orderData = {
             userId,
             items,
             amount,
             address,
-            paymentMethod: "COD",
+            paymentMethod: paymentMethod,
             payment: false,
             date: Date.now(),
         }
@@ -89,13 +89,13 @@ export const verifyStripe = async (req, res) => {
     try {
         if (success === 'true') {
             await orderModel.findByIdAndUpdate(orderId, { payment: true })
-            await userModel.findByIdAndUpdate(userId, {cartData: {}})
+            await userModel.findByIdAndUpdate(userId, { cartData: {} })
             res.json({ success: true, message: "Payment Success" })
             // const order = await orderModel.findById(orderId)
             // order.payment = true
             // await order.save()
             // await userModel.findByIdAndUpdate(userId, { $push: { orders: order } }).exec()
-        }else {
+        } else {
             await orderModel.findByIdAndDelete(orderId)
             res.json({ success: false, message: "Payment Failed" })
         }

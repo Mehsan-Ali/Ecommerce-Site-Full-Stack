@@ -7,7 +7,7 @@ export const verifyUser = async (req, res, next) => {
         if (!token) return res.status(400).json({ success: false, message: "No token provided" });
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
         if (!decoded) return res.status(400).json({ success: false, message: "Invalid Token" })
-        // req.body.userId = decoded.id
+        req.body.userId = decoded.id
         req.user = { id: decoded.id };
         if (decoded.id !== req.body.userId) return res.status(400).json({ success: false, message: "Invalid Token" })
         next()
