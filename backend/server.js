@@ -10,14 +10,21 @@ import ConnectCloudinary from './config/cloudinary.js'
 import cookieParser from 'cookie-parser'
 
 const app = express()
+
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 //middlewares
 app.use(express.json())
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173", // frontend origin
-  credentials: true // allow cookies
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
-
 const PORT = process.env.PORT || 3000
 
 DatabaseConn()
