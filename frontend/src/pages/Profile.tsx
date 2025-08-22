@@ -75,9 +75,9 @@ export default function Profile() {
                     <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 transition-all duration-150 cursor-pointer text-white px-4 py-2 rounded-2xl flex items-center gap-2 shadow   ">
                         <LogOut className="w-4 h-4" /> Logout
                     </button>
-                    <button className="border px-4 py-2 rounded-2xl flex items-center gap-2 text-gray-700 hover:bg-gray-100">
+                    {/* <button className="border px-4 py-2 rounded-2xl flex items-center gap-2 text-gray-700 hover:bg-gray-100">
                         <Edit className="w-4 h-4" /> Edit Profile
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

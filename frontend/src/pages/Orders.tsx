@@ -1,3 +1,4 @@
+import { Box, Calendar, CalendarDays, CreditCard, MapIcon, MapPin } from 'lucide-react'
 import { Title } from '../components/Title'
 import { useAppSelector } from '../store/hooks'
 
@@ -6,7 +7,7 @@ export const Orders = () => {
     const { currency } = useAppSelector((state) => state.shop)
 
     return (
-        <div className="py-10 px-5 md:px-20 min-h-screen">
+        <div className="py-10 px-5 md:px-10 min-h-screen">
             {/* Page Title */}
             <div className="mb-8 text-xl sm:text-2xl uppercase font-semibold text-gray-800">
                 <Title text1="My" text2="Orders" />
@@ -18,75 +19,88 @@ export const Orders = () => {
                     orders.map((order) => (
                         <div
                             key={order._id}
-                            className="bg-gray-50/50 rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5"
-                        >
+                            className="bg-gray-50/5 rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5">
                             {/* Order Header */}
                             <div className="flex flex-wrap justify-between items-start">
-                                <div>
-                                    <p className="text-sm text-gray-800 font-medium">
-                                        Order ID: <span className="font-normal text-gray-500">{order._id}</span>
+                                <div className='flex flex-col gap-2'>
+                                    <p className="text-base text-gray-800 font-medium">
+                                        Order #<span className="">{order._id}</span>
                                     </p>
-                                    <p className="text-sm text-gray-800 font-medium">
-                                        Date: <span className='font-normal text-gray-500'>
-                                            {new Date(order.date).toDateString()}
-                                            {/* {new Date(order.date).toLocaleDateString("en-GB", {
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric"
-                                            }).replace(/(\d{1,2}) (\w{3}) (\d{4})/, "$1, $2, $3")} */}
-                                        </span>
-                                    </p>
-                                    <p className="text-sm text-gray-800 font-medium">
-                                        Payment: <span className='font-normal text-gray-500 capitalize'>{order.paymentMethod === "COD" ? "Cash on Delivery" : order.paymentMethod}</span>
-                                    </p>
+                                    <div className='flex gap-3'>
+                                        {/* ------------ Order Date ------------ */}
+                                        <p className="text-sm flex gap-1 items-center text-gray-800 font-medium">
+                                            <CalendarDays size={20} />
+                                            <span className='font-normal text-gray-500'>
+                                                {new Date(order.date).toDateString()}
+                                            </span>
+                                        </p>
+                                        {/* ------------ Payment Method ------------ */}
+                                        <p className="text-sm flex gap-1 text-gray-800 font-medium">
+                                            <CreditCard size={20} />
+                                            <span className='font-normal text-gray-500 capitalize'>{order.paymentMethod === "COD" ? "Cash on Delivery" : order.paymentMethod}</span>
+                                        </p>
+                                        <p className="text-sm flex gap-1 text-gray-800 font-medium">
+                                            <Box size={20} />
+                                            <span className='font-normal text-gray-500'>{order.items.length} Items</span>
+                                        </p>
+                                    </div>
                                 </div>
+                                {/* -------------- Order Status ------------ */}
                                 <div className="text-right">
-                                    <p className="text-lg font-semibold text-gray-800">
-                                        {currency}{order.amount}
-                                    </p>
-                                    <span
-                                        className={`inline-flex items-center gap-2 px-3 py-1 mt-2 text-xs font-medium rounded-full ${order.status === "Delivered"
+                                    <div
+                                        className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-medium rounded-full ${order.status === "Delivered"
                                             ? "bg-green-100 text-green-700"
                                             : order.status === "Shipped"
                                                 ? "bg-blue-100 text-blue-700"
                                                 : "bg-yellow-100 text-yellow-700"
                                             }`}
                                     >
-                                        <span className="w-2 h-2 rounded-full bg-current"></span>
+                                        <span className="shrink-0 w-2 h-2 rounded-full bg-current"></span>
                                         {order.status || "Ongoing"}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Items */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
+                            {/*-------------- Items -------------- */}
+                            <div className="grid grid-cols-1 gap-3 items-center">
                                 {order.items.map((item: any) => (
-                                    <div key={item._id} className="flex px-4 flex-1/2 gap-5 py-4 items-center border border-gray-300 rounded-md">
+                                    <div key={item._id} className="flex p-4 flex-1/2 gap-5 items-center border border-gray-100 bg-gray-50 rounded-lg">
                                         <img
                                             src={item.itemImage}
                                             alt={item.name}
                                             className="w-20 h-20 object-cover rounded-xl border border-gray-200"
                                         />
                                         <div className="flex-1 text-sm">
-                                            <p className="font-medium text-gray-800">{item.title}</p>
+                                            <p className="font-medium text-base text-gray-800">{item.title}</p>
                                             <div className="flex flex-wrap gap-4 mt-1 text-gray-600 text-xs sm:text-sm">
-                                                <p>{currency}{item.itemPrice}</p>
-                                                <p>Qty: {item.quantity}</p>
                                                 <p>Size: {item.size}</p>
+                                                <p>Qty: {item.quantity}</p>
+                                                <p>Category: {item.category}</p>
                                             </div>
                                         </div>
+                                        <p className='textlg font-semibold'>{currency}{item.itemPrice}</p>
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Address */}
-                            <div className="pt-2 text-xs sm:text-sm text-gray-600">
-                                <p className="font-medium text-gray-700 mb-1">Shipping Address:</p>
-                                <p>
-                                    {order.address.address}, {order.address.city},{" "}
-                                    {order.address.state} - {order.address.zipCode},{" "}
-                                    {order.address.country} - {order.address.phoneNumber}
-                                </p>
+                            <hr className='border-gray-400/20' />
+                            <div className='flex justify-between'>
+                                {/* -------------- Address -------------- */}
+                                <div className="pt-2 flex items-center gap-1 text-xs sm:text-sm text-gray-600">
+                                    <MapPin size={20} />
+                                    <div>
+                                        <p className='font-semibold text-base'>{order.address.firstName} {order.address.lastName}</p>
+                                        <p>
+                                            {order.address.address}, {order.address.city},{" "}
+                                            {order.address.state} - {order.address.zipCode}
+                                        </p>
+                                    </div>
+                                </div>
+                                {/* -------------- Order Total -------------- */}
+                                <div className='text-gray-600 text-sm text-end'>
+                                    <p>Total Amount</p>
+                                    <p className='font-semibold text-2xl'>{currency}{order.amount}</p>
+                                    <p>Payment: {order.payment ? "Paid" : "Pending"}</p>
+                                </div>
                             </div>
                         </div>
                     ))
