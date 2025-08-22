@@ -1,11 +1,8 @@
 import { assets } from '../assets/assets'
-import { useAppSelector } from '../store/hooks'
 
 const Hero = () => {
-    const { user } = useAppSelector((state) => state.user)
     return (
         <div className='flex flex-col sm:flex-row border border-gray-400 mx-5 sm:mx-14 md:mx-20 lg:mx-36'>
-            {user?.name}
             {/* --------------- Left Side ------------------ */}
             <div className='w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0'>
                 <div className='font-semibold text-gray-600'>
