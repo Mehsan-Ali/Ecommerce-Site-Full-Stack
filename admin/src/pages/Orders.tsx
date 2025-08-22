@@ -9,6 +9,7 @@ const Orders = ({ token }: { token: string }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const fetchOrders = useCallback(async () => {
+		setIsLoading(true)
 		try {
 			const resp = await axios.get(`${backednUrl}/api/order/list`, {
 				headers: {
@@ -21,6 +22,8 @@ const Orders = ({ token }: { token: string }) => {
 			}
 		} catch (error) {
 			console.log(error)
+		} finally {
+			setIsLoading(false)
 		}
 	}, [token])
 	console.log(status)
@@ -97,7 +100,7 @@ const Orders = ({ token }: { token: string }) => {
 											{/* <option value="Out For Delivery">Out For Delivery</option> */}
 											<option value="Delivered">Delivered</option>
 										</select>
-										<button type="submit" disabled={isLoading} className="bg-black text-white w-full py-2 text-sm font-semibold rounded-lg cursor-pointer">
+										<button type="submit" disabled={isLoading} className={`bg-black text-white w-full py-2 text-sm font-semibold rounded-lg cursor-pointer ${isLoading && 'opacity-50 cursor-not-allowed'} `}>
 											Update Status
 										</button>
 									</form>
