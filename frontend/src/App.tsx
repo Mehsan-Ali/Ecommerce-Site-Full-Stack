@@ -21,6 +21,7 @@ import { client } from './APIs/client'
 import { setLoading, setOrders } from './store/slice/orderSlice'
 import { setUser } from './store/slice/userSlice'
 import Verify from './pages/Verify'
+import Profile from './pages/Profile'
 
 function App() {
   const { user, token } = useAppSelector((state) => state.user)
@@ -90,6 +91,15 @@ function App() {
     }
     return children
   }
+
+  const RedirectToLogin = ({ children }: any) => {
+    const { user } = useAppSelector((state) => state.user)
+    if (!user) {
+      return <Navigate to='/login' replace />
+    }
+    return children
+  }
+
   return (
     <>
       <Navbar />
@@ -103,6 +113,12 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/place-order' element={<PlaceOrder />} />
         <Route path='/orders' element={<Orders />} />
+
+        <Route path='/profile' element={
+          <RedirectToLogin>
+            <Profile />
+          </RedirectToLogin>
+        } />
 
         <Route path='/verify' element={<Verify />} />
 

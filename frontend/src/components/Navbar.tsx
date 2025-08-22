@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setShowSearch } from '../store/slice/shopSlice'
 import { clearUser } from '../store/slice/userSlice'
+import { LogOut, ShoppingBag, User } from 'lucide-react'
 const NavgPage = [
     {
         id: 1,
@@ -43,7 +44,7 @@ export const Navbar = () => {
         dispatch(clearUser())
         navg('/')
     }
-    
+
     useEffect(() => {
         setCartItem(cart)
     }, [cart])
@@ -73,13 +74,23 @@ export const Navbar = () => {
                     <div className='group relative'>
                         <img src={assets.profile_icon} alt="" className='w-ssm sm:w-slg cursor-pointer' />
                         <div className='group-hover:block hidden dropdown-menu absolute pt-4 right-0 shadow-lg rounded-md'>
-                            <div className='flex flex-col gap-2 w-36 py-2 px-5 bg-slate-200 text-gray-500'>
+                            <div className='flex font-medium text-base flex-col gap-3 w-36 py-5 px-5 rounded-md bg-slate-100 text-gray-500'>
                                 {
                                     user ? (
                                         <>
-                                            <NavLink to='/profile' className='hover:text-gray-900'>Profile</NavLink>
-                                            <NavLink to='/orders' className='hover:text-gray-900'>Orders</NavLink>
-                                            <p onClick={handleLogout} className='cursor-pointer hover:text-gray-900'>Logout</p>
+                                            <NavLink to='/profile' className='hover:text-gray-900 flex items-center gap-2'>
+                                                <User size={20}/>
+                                                <p>Profile</p>
+                                            </NavLink>
+
+                                            <NavLink to='/orders' className='hover:text-gray-900 flex gap-2 items-center'>
+                                                <ShoppingBag size={20}/>
+                                                Orders
+                                            </NavLink>
+                                            <div onClick={handleLogout} className='flex gap-2 items-center'>
+                                                <LogOut size={20}/>
+                                                <p className='cursor-pointer hover:text-gray-900'>Logout</p>
+                                            </div>
                                         </>
                                     ) :
                                         <NavLink to='/login' className='hover:text-gray-900'>Login</NavLink>
