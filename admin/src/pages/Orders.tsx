@@ -34,12 +34,13 @@ const Orders = ({ token }: { token: string }) => {
 				},
 			})
 			const data = resp.data
-			if(data.success) {
+			if (data.success) {
 				await fetchOrders()
 				toast.success(data.message)
+				console.log(data)
 			}
 			console.log(data)
-		} catch (error:any) {
+		} catch (error: any) {
 			toast.error(error.response?.data?.message)
 			console.log(error)
 		} finally {
@@ -61,97 +62,68 @@ const Orders = ({ token }: { token: string }) => {
 					{orderList.map((order) => (
 						<div
 							key={order._id}
-							className="border border-gray-300 rounded-2xl shadow-md p-6 bg-white">
+							className="border border-gray-300 rounded-2xl space-y-3 shadow-md p-4 sm:p-8 bg-white">
 							{/* Order Header */}
-							<div className="flex justify-between flex-wrap gap-2 items-center mb-4">
-								<h3 className="font-semibold text-base md:text-lg">
-									Order ID:{" "}
-									<span className="text-gray-700 font-normal">
-										{order._id}
-									</span>
-								</h3>
-								<form className="flex flex-col gap-2" onSubmit={(e) => updateOrderStatus(order._id, e)}>
-									<select defaultValue={order.status} onChange={(e) => setStatus(e.target.value)} className="px-3 py-2 text-sm sm:text-base rounded-sm bg-blue-50 text-blue-700 outline-none">
-										<option value="Order Placed">Order Placed</option>
-										<option value="Processing">Processing</option>
-										<option value="Shipped">Shipped</option>
-										<option value="Out For Delivery">Out For Delivery</option>
-										<option value="Delivered">Delivered</option>
-									</select>
-									<button disabled={isLoading} type="submit" className={`px-3 py-2 text-sm rounded-sm bg-blue-50 text-blue-700 cursor-pointer`}>
-										Update Status
-									</button>
-								</form>
+							<div className="flex gap-5 flex-wrap">
+								<p className="font-semibold text-base sm:text-lg text-gray-800">Order #{order._id}</p>
+								<p className={`px-4 py-1 rounded-md text-xs sm:text-sm font-medium ${order.status === 'Order Placed' && 'bg-black/10 text-slate-900'} ${order.status === 'Processing' && 'bg-yellow-200 text-yellow-900'} ${order.status === 'Shipped' && 'bg-blue-200 text-blue-900'} ${order.status === 'Delivered' && 'bg-green-200 text-green-800'} }`}>{order.status}</p>
+								<p className={`px-4 py-1 rounded-md text-xs sm:text-sm font-medium ${order.payment ? 'bg-slate-950 text-white' : 'bg-slate-200 text-gray-900'}`}>{order.payment ? "Paid" : "Unpaid"}</p>
 							</div>
+							{/* ---------- Customer Details ------------ */}
+							<div className="flex justify-between font-semibold text-[13px] sm:text-sm flex-wrap">
+								<div>
+									<p>Customer Name: <span className="text-gray-500 font-normal">{order.address.firstName} {order.address.lastName}</span></p>
+									<p>Email: <span className="text-gray-500 font-normal">{order.address.email}</span> </p>
+									<p>Phone: <span className="text-gray-500 font-normal">{order.address.phoneNumber}</span></p>
+								</div>
+								<div>
+									<p>Date: <span className="text-gray-500 font-normal">{new Date(order.date).toDateString()}</span></p>
+									<p>Payment: <span className="text-gray-500 font-normal">{order.paymentMethod}</span> </p>
+									<p>Items: <span className="text-gray-500 font-normal">{order.items.length} item(s)</span></p>
+								</div>
+								<div className="text-end flex gap-5 items-center">
+									<div>
+										<p className="text-gray-900 text-xl sm:text-3xl font-bold">$210</p>
+										<p>Total Amount</p>
+									</div>
+									<form onSubmit={(e) => updateOrderStatus(order._id, e)} className="flex flex-col items-start gap-2">
+										<select
+											defaultValue={order.status}
+											onChange={(e) => setStatus(e.target.value)}
+											className="px-4 py-2 text-sm sm:text-base rounded-lg bg-white/70 backdrop-blur-md border border-blue-200 text-blue-700 font-medium shadow-sm hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300">
+											<option value="Order Placed">Order Placed</option>
+											<option value="Processing">Processing</option>
+											<option value="Shipped">Shipped</option>
+											{/* <option value="Out For Delivery">Out For Delivery</option> */}
+											<option value="Delivered">Delivered</option>
+										</select>
+										<button type="submit" disabled={isLoading} className="bg-black text-white w-full py-2 text-sm font-semibold rounded-lg cursor-pointer">
+											Update Status
+										</button>
+									</form>
+								</div>
+							</div>
+							<hr className="border-gray-300" />
+							{/* -------------- Items -------------- */}
 
-							{/* Items */}
-							<div className="mb-4">
-								<h4 className="font-medium text-gray-800 mb-2">Items:</h4>
-								<ul className="grid grid-cols-1 md:grid-cols-3 gap-3">
-									{order.items.map((item: any, idx: number) => (
-										<li
-											key={idx}
-											className="flex w-full p-2 rounded-md items-center gap-4 border border-gray-300 ">
-											<img
-												src={item.itemImage}
-												alt={item.title}
-												className="w-16 h-16 object-cover rounded"
-											/>
-											<div>
-												<p className="font-medium">{item.title}</p>
-												<p className="text-sm text-gray-600">
-													Size: {item.size} | Qty: {item.quantity}
-												</p>
-												<p className="text-sm font-semibold">
-													${item.itemPrice}
-												</p>
+							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+								{order.items.map((item: any) => (
+									<div key={item._id} className="flex gap-5 items-center border border-gray-200 bg-gray-50 p-2 rounded-md">
+										<img
+											className="w-16 h-16 object-cover rounded-md"
+											src={item.itemImage}
+											alt={item.title}
+										/>
+										<div>
+											<p className="text-gray-800 text-sm font-semibold">{item.title}</p>
+											<div className="flex gap-1 text-xs text-gray-900 font-semibold">
+												<p className="text-gray-600">{item.quantity}x</p>
+												<p className="text-gray-600">${item.itemPrice}</p>
+												<p className="text-gray-600">{item.size}</p>
 											</div>
-										</li>
-									))}
-								</ul>
-							</div>
-
-							{/* Order Summary */}
-							<div className="mb-4">
-								<h4 className="font-medium text-gray-800 mb-2">Order Info:</h4>
-								<p>
-									<span className="font-semibold">Amount:</span> $
-									{order.amount}
-								</p>
-								<p>
-									<span className="font-semibold">Payment:</span>{" "}
-									{order.paymentMethod}{" "}
-									{order.payment ? "(Paid)" : "(Not Paid)"}
-								</p>
-								<p>
-									<span className="font-semibold">Date:</span>{" "}
-									{new Date(order.date).toLocaleString()}
-								</p>
-							</div>
-
-							{/* Address */}
-							<div>
-								<h4 className="font-medium text-gray-800 mb-2">Shipping Address:</h4>
-								<p className="font-semibold">
-									Name: <span className="text-gray-600 font-normal">{order.address.firstName} {order.address.lastName}</span>
-								</p>
-								<p className="font-semibold">
-									Address: <span className="text-gray-600 font-normal">{order.address.address}</span>
-								</p>
-								<p className="font-semibold">
-									City: <span className="text-gray-600 font-normal">{order.address.city}</span>,  State: <span className="text-gray-600 font-normal">{order.address.state}</span>
-								</p>
-								<p></p>
-								<p className="font-semibold">
-									Country:
-									<span className="font-normal text-gray-600">
-										{order.address.country}
-									</span>
-								</p>
-								<p className="font-semibold">
-									Zip Code: <span className="text-gray-600 font-normal">{order.address.zipCode}</span>
-								</p>
-								<p className="font-semibold">Phone: <span className="font-normal text-gray-600">{order.address.phoneNumber}</span> </p>
+										</div>
+									</div>
+								))}
 							</div>
 						</div>
 					))}

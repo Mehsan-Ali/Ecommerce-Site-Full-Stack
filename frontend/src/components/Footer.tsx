@@ -24,7 +24,7 @@ export const Footer = () => {
                         <p className='text-lg poppins-semibold text-black'>GET IN TOUCH</p>
                         <ul className='text-gray-700 text-sm space-y-2'>
                             <li>+1-000-000-0000</li>
-                            <li>greatstackdev@gmail.com</li>
+                            <li>abc@email.com</li>
                             <li>Instagram</li>
                             <li>Facebook</li>
                         </ul>
