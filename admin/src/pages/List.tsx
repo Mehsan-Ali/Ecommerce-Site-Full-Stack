@@ -36,7 +36,7 @@ const List = ({ token }: { token: string }) => {
 				}
 			})
 			const data = response.data
-			if(data.success) {
+			if (data.success) {
 				await fetchProducts()
 				toast.success(data.message)
 			}
@@ -52,9 +52,16 @@ const List = ({ token }: { token: string }) => {
 	}, [])
 	return (
 		<div className=''>
-			<div className='pb-8'>
-				<p className='text-2xl font-medium'>Product List</p>
+			<div className='flex justify-between items-center'>
+				<div className='pb-8'>
+					<p className='text-2xl font-medium'>Product List</p>
+				</div>
+
+				<button disabled={isLoading} className={`bg-black cursor-pointer py-2 px-10 rounded-lg text-white font-medium ${isLoading ? 'opacity-50' : ''}`} onClick={fetchProducts}>
+					Referesh
+				</button>
 			</div>
+
 			{isLoading && <p>Loading...</p>}
 			{productList.length < 1 ?
 				<div className='flex justify-center items-center gap-2 text-gray-400 h-[50vh]'>
@@ -81,7 +88,7 @@ const List = ({ token }: { token: string }) => {
 										<td className='py-2'>{item.name}</td>
 										<td className='py-2 capitalize'>{item.category}</td>
 										<td className='py-2'>${item.price}</td>
-										<td className='py-2'><Trash2 color='red' onClick={() => removeProductItem(item._id)} className='cursor-pointer'/></td>
+										<td className='py-2'><Trash2 color='red' onClick={() => removeProductItem(item._id)} className='cursor-pointer' /></td>
 									</tr>
 
 								))

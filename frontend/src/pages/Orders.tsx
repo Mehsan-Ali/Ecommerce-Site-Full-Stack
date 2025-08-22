@@ -12,7 +12,6 @@ export const Orders = () => {
             <div className="mb-8 text-xl sm:text-2xl uppercase font-semibold text-gray-800">
                 <Title text1="My" text2="Orders" />
             </div>
-
             {/* Orders List */}
             <div className="flex flex-col space-y-6">
                 {orders.length > 0 ? (

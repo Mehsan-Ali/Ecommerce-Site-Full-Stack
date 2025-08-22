@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar'
 import { Login } from './components/Login'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import DashBoard from './pages/DashBoard'
 
 export const backednUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
                   <Route path='/add' element={<Add token={token} />} />
                   <Route path='/list-items' element={<List token={token} />} />
                   <Route path='/orders' element={<Orders token={token} />} />
+                  <Route path='/dashboard' element={<DashBoard token={token} />} />
                 </Routes>
               </div>
             </div>

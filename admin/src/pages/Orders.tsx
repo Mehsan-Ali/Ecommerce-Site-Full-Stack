@@ -2,6 +2,7 @@ import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { backednUrl } from "../App"
 import { toast } from "react-toastify"
+import { BoxIcon, Calendar, Wallet } from "lucide-react"
 
 const Orders = ({ token }: { token: string }) => {
 	const [orderList, setOrderList] = useState<any[]>([])
@@ -53,11 +54,34 @@ const Orders = ({ token }: { token: string }) => {
 	useEffect(() => {
 		fetchOrders()
 	}, [fetchOrders])
-
+	const totalRevenue = orderList.reduce((total, order) => total + order.amount,0)
+	const totalPaidOrders = orderList.filter((order)=> order.payment).length
 	return (
 		<div className="">
 			<h2 className="text-2xl font-bold mb-4">All Orders</h2>
-
+			<div className="grid grid-cols-1 my-8 sm:grid-cols-2 md:grid-cols-3 gap-4">
+				<div className="flex justify-between items-center bg-gray-50/5 rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 h-28 sm:h-36">
+					<span className="">
+						<p className="text-base sm:text-lg text-gray-500 font-bold">Total Orders</p>
+						<p className="text-2xl sm:text-3xl text-gray-950 font-bold">{orderList.length}</p>
+					</span>
+					<BoxIcon className="size-10 sm:size-12 text-blue-800" />
+				</div>
+				<div className="flex justify-between items-center bg-gray-50/5 rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 h-28 sm:h-36">
+					<span>
+						<p className="text-base sm:text-lg text-gray-500 font-bold">Total Revenue</p>
+						<p className="text-2xl sm:text-3xl text-gray-950 font-bold">${totalRevenue}</p>
+					</span>
+					<Wallet className="size-10 sm:size-12 text-green-800" />
+				</div>
+				<div className="flex justify-between items-center bg-gray-50/5 rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 h-28 sm:h-36">
+					<span>
+						<p className="text-base sm:text-lg text-gray-500 font-bold">Paid Orders</p>
+						<p className="text-2xl sm:text-3xl text-gray-950 font-bold">{totalPaidOrders}</p>
+					</span>
+					<Calendar className="size-10 sm:size-12 text-sky-800" />
+				</div>
+			</div>
 			{orderList.length === 0 ? (
 				<p className="text-gray-600">No orders found</p>
 			) : (
@@ -73,7 +97,7 @@ const Orders = ({ token }: { token: string }) => {
 								<p className={`px-4 py-1 rounded-md text-xs sm:text-sm font-medium ${order.payment ? 'bg-slate-950 text-white' : 'bg-slate-200 text-gray-900'}`}>{order.payment ? "Paid" : "Unpaid"}</p>
 							</div>
 							{/* ---------- Customer Details ------------ */}
-							<div className="flex justify-between font-semibold text-[13px] sm:text-sm flex-wrap">
+							<div className="flex gap-2 justify-between font-semibold text-[13px] sm:text-sm flex-wrap">
 								<div>
 									<p>Customer Name: <span className="text-gray-500 font-normal">{order.address.firstName} {order.address.lastName}</span></p>
 									<p>Email: <span className="text-gray-500 font-normal">{order.address.email}</span> </p>
@@ -84,12 +108,12 @@ const Orders = ({ token }: { token: string }) => {
 									<p>Payment: <span className="text-gray-500 font-normal">{order.paymentMethod}</span> </p>
 									<p>Items: <span className="text-gray-500 font-normal">{order.items.length} item(s)</span></p>
 								</div>
-								<div className="text-end flex gap-5 items-center">
+								<div className="text-end flex gap-5 w-full sm:w-auto items-center">
 									<div>
-										<p className="text-gray-900 text-xl sm:text-3xl font-bold">$210</p>
+										<p className="text-gray-900 text-xl sm:text-3xl font-bold">${order.amount}</p>
 										<p>Total Amount</p>
 									</div>
-									<form onSubmit={(e) => updateOrderStatus(order._id, e)} className="flex flex-col items-start gap-2">
+									<form onSubmit={(e) => updateOrderStatus(order._id, e)} className="flex flex-col items-start gap-2 ml-auto">
 										<select
 											defaultValue={order.status}
 											onChange={(e) => setStatus(e.target.value)}
