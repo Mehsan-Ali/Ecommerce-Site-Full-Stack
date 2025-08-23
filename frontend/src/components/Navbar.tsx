@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setShowSearch } from '../store/slice/shopSlice'
 import { clearUser } from '../store/slice/userSlice'
-import { LogOut, ShoppingBag, User } from 'lucide-react'
+import { LogOut, ShoppingBag, User, BoxSelectIcon } from 'lucide-react'
 const NavgPage = [
     {
         id: 1,
@@ -51,8 +51,8 @@ export const Navbar = () => {
     return (
         <>
             <div className={`flex justify-between items-center py-4 bg-gray-200/10 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] border-b border-gray-200`} >
-                <Link to={'/'}>
-                    <img src={assets.logo} alt="" className='w-36' />
+                <Link to={'/'} className='flex gap-2 bg-black p-2 text-white rounded-md'>
+                    <BoxSelectIcon /> Logo
                 </Link>
 
                 <ul className='md:flex gap-10 font-semibold hidden '>
