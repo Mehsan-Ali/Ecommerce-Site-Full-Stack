@@ -1,4 +1,4 @@
-import { DollarSign, Package, ShoppingCart, TrendingDown, TrendingUp, Users } from 'lucide-react'
+import { DollarSign, Eye, Package, ShoppingCart, TrendingDown, TrendingUp, Users } from 'lucide-react'
 import React from 'react'
 
 const stats = [
@@ -43,7 +43,7 @@ const DashBoard = ({ token }: { token: string }) => {
         <h5 className='text-lg sm:text-2xl font-bold text-gray-900'>Admin Dashboard</h5>
         <p className='text-base sm:text-lg'>Manage your e-commerce store efficiently</p>
       </div>
-
+      {/* ------------- Header Card ------------ */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 my-8 w-full">
         {stats.map((stat) => {
           const Icon = stat.icon
@@ -69,6 +69,29 @@ const DashBoard = ({ token }: { token: string }) => {
           )
         })}
       </div>
+      {/* ------------- Top Products ------------ */}
+      <div className='bg-gray-100 border-gray-200 border p-5 h-full space-y-8 rounded-lg'>
+        <div className='flex justify-between items-end'>
+          <span>
+            <h5 className='text-base sm:text-lg font-bold text-gray-900'>Top Products</h5>
+            <p className='text-xs sm:text-sm'>Best performing products this month</p>
+          </span>
+          <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
+        </div>
+        <div>
+          {Array.from({ length: 8 }).map((_, index) => (
+              <div className='grid grid-cols-[1fr_3fr_auto] gap-4 py-2'>
+                <span className='text-sm text-gray-500 font-medium'>#{index + 1}</span>
+                <span className='text-sm text-gray-600'>
+                  <p className='font-medium text-gray-800'>Wireless Headphones</p>
+                  <p>1234 sales</p>
+                </span>
+                <span className='text-sm text-gray-500'>Category</span>
+              </div>
+            ))}
+        </div>
+      </div>
+
     </div>
   )
 }
