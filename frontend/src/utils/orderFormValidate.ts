@@ -11,5 +11,4 @@ export const orderFormSchema = z.object({
   country: z.string().min(3, 'Country must be at least 3 characters'),
   phoneNumber: z.string().min(11, 'Phone Number must be at least 11 characters')
 })
-
 export type OrderFormData = z.infer<typeof orderFormSchema>
