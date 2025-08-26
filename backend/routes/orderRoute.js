@@ -1,11 +1,12 @@
 import express from 'express'
-import { allOrders, placeOrder, placeOrderRazorpay, placeOrderStrip, updateStatusOrder, userOrders, verifyStripe } from '../controllers/orderController.js'
+import { allOrders, limitOrders, placeOrder, placeOrderRazorpay, placeOrderStrip, updateStatusOrder, userOrders, verifyStripe } from '../controllers/orderController.js'
 import { verifyUser } from '../middleware/verifyUser.js'
 import adminAuth from '../middleware/adminAuth.js'
 
 const router = express.Router()
 // Admin Features
 router.get('/list', adminAuth, allOrders)
+router.get('/orders', adminAuth, limitOrders)
 router.patch('/status', adminAuth, updateStatusOrder)
 
 // Payment Features

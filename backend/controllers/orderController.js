@@ -127,6 +127,28 @@ export const allOrders = async (req, res) => {
     }
 }
 
+// ---------- Limit Orders for Pagination ------------
+export const limitOrders = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;   // default page 1
+    const limit = parseInt(req.query.limit) || 5; // default 5 orders
+    const skip = (page - 1) * limit;
+
+    const allOrders = await orderModel.find({}).skip(skip).limit(limit);
+
+    res.status(200).json({ 
+      success: true, 
+      message: "All Orders", 
+      page,
+      limit,
+      allOrders 
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // ---------- User Orders ------------
 export const userOrders = async (req, res) => {
     try {
