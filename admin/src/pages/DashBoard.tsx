@@ -69,17 +69,44 @@ const DashBoard = ({ token }: { token: string }) => {
           )
         })}
       </div>
-      {/* ------------- Top Products ------------ */}
-      <div className='bg-gray-100 border-gray-200 border p-5 h-full space-y-8 rounded-lg'>
-        <div className='flex justify-between items-end'>
-          <span>
-            <h5 className='text-base sm:text-lg font-bold text-gray-900'>Top Products</h5>
-            <p className='text-xs sm:text-sm'>Best performing products this month</p>
-          </span>
-          <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
+      <div className='flex gap-5 justify-between'>
+        {/* ------------- Top Products ------------ */}
+        <div className='bg-gray-50 border-gray-200 grow border p-5 h-full space-y-8 rounded-lg'>
+          <div className='flex justify-between items-end'>
+            <span>
+              <h5 className='text-base sm:text-lg font-bold text-gray-900'>Top Products</h5>
+              <p className='text-xs sm:text-sm'>Best performing products this month</p>
+            </span>
+            <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
+          </div>
+          <div>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} >
+                <div className='grid grid-cols-[1fr_3fr_auto] items-center gap-4 py-2 border-gray-300'>
+                  <span className='text-sm text-gray-500 font-medium'>#{index + 1}</span>
+                  <span className='text-sm text-gray-600'>
+                    <p className='font-medium text-gray-800'>Wireless Headphones</p>
+                    <p>1234 sales</p>
+                  </span>
+                  <span className='text-sm text-gray-500'>Category</span>
+                </div>
+                <hr className='border-gray-200' />
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
-          {Array.from({ length: 8 }).map((_, index) => (
+
+        {/* ------------- Recent Orders ------------ */}
+        <div className='bg-gray-100 border-gray-200 grow border p-5 h-full space-y-8 rounded-lg'>
+          <div className='flex justify-between items-end'>
+            <span>
+              <h5 className='text-base sm:text-lg font-bold text-gray-900'>Top Products</h5>
+              <p className='text-xs sm:text-sm'>Best performing products this month</p>
+            </span>
+            <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
+          </div>
+          <div>
+            {Array.from({ length: 8 }).map((_, index) => (
               <div className='grid grid-cols-[1fr_3fr_auto] gap-4 py-2'>
                 <span className='text-sm text-gray-500 font-medium'>#{index + 1}</span>
                 <span className='text-sm text-gray-600'>
@@ -89,6 +116,7 @@ const DashBoard = ({ token }: { token: string }) => {
                 <span className='text-sm text-gray-500'>Category</span>
               </div>
             ))}
+          </div>
         </div>
       </div>
 
