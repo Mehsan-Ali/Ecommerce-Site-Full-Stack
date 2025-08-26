@@ -9,7 +9,7 @@ const Navbar = ({ setToken }: any) => {
                 </div>
                 <p>Admin</p>
             </div>
-            <button onClick={() => setToken('')} className='bg-gray-500 cursor-pointer py-2 px-4 rounded-2xl text-white font-medium' >Logout</button>
+            <button onClick={() => setToken('')} className='bg-gray-900 cursor-pointer py-2 px-4 rounded-lg text-white font-medium' >Logout</button>
         </div>
     )
 }

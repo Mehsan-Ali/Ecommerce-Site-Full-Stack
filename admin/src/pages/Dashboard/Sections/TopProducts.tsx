@@ -1,5 +1,4 @@
 import { Eye } from 'lucide-react'
-import React from 'react'
 
 const TopProducts = () => {
     return (
@@ -13,7 +12,7 @@ const TopProducts = () => {
                     <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
                 </div>
                 <div>
-                    {Array.from({ length: 8 }).map((_, index) => (
+                    {Array.from({ length: 5 }).map((_, index) => (
                         <div key={index} >
                             <div className='grid grid-cols-[1fr_3fr_auto] items-center gap-4 py-2 border-gray-300'>
                                 <span className='text-sm text-gray-500 font-medium'>#{index + 1}</span>
