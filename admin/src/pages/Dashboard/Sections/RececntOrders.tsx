@@ -34,7 +34,7 @@ const RececntOrders = ({ token }: { token: string }) => {
                 <div className='flex justify-between items-end'>
                     <span>
                         <h5 className='text-base sm:text-lg font-bold text-gray-900'>Recent Orders</h5>
-                        <p className='text-xs sm:text-sm'>You have 5 orders this week.</p>
+                        <p className='text-xs sm:text-sm'>You have {rececntOrders.length} orders this week.</p>
                     </span>
                     <NavLink to={'/orders'}>
                         <button className='flex gap-2 items-center border-2 font-medium border-gray-200 rounded-lg bg-gray-50 shadow-md px-4 py-2 text-sm cursor-pointer'><Eye size={18} /> View All</button>
