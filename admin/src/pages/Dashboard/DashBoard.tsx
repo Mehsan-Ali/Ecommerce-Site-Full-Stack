@@ -53,15 +53,15 @@ const DashBoard = ({ token }: { token: string }) => {
             <header key={stat.title} className="bg-gray-100 border-gray-200 border p-5 h-full space-y-8 rounded-lg ">
               <section className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <h3 className="text-base font-thin text-gray-900">{stat.title}</h3>
-                <Icon className="h-4 w-4 text-gray-500" />
+                <Icon className="size-4 text-gray-500" />
               </section>
               <div className='flex flex-col items-start justify-end'>
                 <div className="text-2xl font-bold text-gray-900 font-sans">{stat.value}</div>
                 <div className="flex items-center space-x-2 text-xs text-gray-500">
                   {stat.trend === "up" ? (
-                    <TrendingUp className="h-3 w-3 text-green-700" />
+                    <TrendingUp className="size-3 text-green-700" />
                   ) : (
-                    <TrendingDown className="h-3 w-3 text-red-700" />
+                    <TrendingDown className="size-3 text-red-700" />
                   )}
                   <span className={stat.trend === "up" ? "text-green-700" : "text-red-700"}>{stat.change}</span>
                   <span>{stat.description}</span>
