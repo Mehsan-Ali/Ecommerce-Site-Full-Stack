@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { client } from '../APIs/client'
@@ -6,7 +6,6 @@ import { clearCart } from '../store/slice/cartSlice'
 
 const Verify = () => {
     const dispatch = useAppDispatch()
-    const { items } = useAppSelector((state) => state.cart)
     const { token } = useAppSelector((state) => state.user)
     const [searchParams, setSearchParams] = useSearchParams()
     const navg = useNavigate()
@@ -36,6 +35,7 @@ const Verify = () => {
             console.log(error)
         }
     }
+    console.log(setSearchParams)
     useEffect(() => {
         verifyPayment()
     },[token])

@@ -1,4 +1,4 @@
-import { Box, Calendar, CalendarDays, CreditCard, MapIcon, MapPin } from 'lucide-react'
+import { Box, CalendarDays, CreditCard, MapPin } from 'lucide-react'
 import { Title } from '../components/Title'
 import { useAppSelector } from '../store/hooks'
 

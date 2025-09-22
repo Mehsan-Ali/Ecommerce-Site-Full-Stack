@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Edit, ShoppingBag, CreditCard, LogOut } from "lucide-react";
+import { ShoppingBag, CreditCard, LogOut } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { clearUser } from "../store/slice/userSlice";
 import { useNavigate } from "react-router-dom";

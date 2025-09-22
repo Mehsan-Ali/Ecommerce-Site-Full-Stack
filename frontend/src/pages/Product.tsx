@@ -37,13 +37,13 @@ export const Product = () => {
       </div>
     )
   }
-  // if (!productData) {
-  //   return (
-  //     <div className='flex justify-center text-gray-400 items-center gap-2 h-[50vh]'>
-  //       <p>Product not found</p>
-  //     </div>
-  //   )
-  // }
+  if (!productData) {
+    return (
+      <div className='flex justify-center text-gray-400 items-center gap-2 h-[50vh]'>
+        <p>Product not found</p>
+      </div>
+    )
+  }
   return (
     <>
       <HeroSection id={productId} />

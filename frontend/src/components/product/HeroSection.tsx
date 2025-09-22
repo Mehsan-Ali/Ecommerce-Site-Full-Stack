@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { assets, products } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { addToCart, addtToCartAsync, getCartAsync } from '../../store/slice/cartSlice'
 import type { AddToCartData } from '../../types/Product'

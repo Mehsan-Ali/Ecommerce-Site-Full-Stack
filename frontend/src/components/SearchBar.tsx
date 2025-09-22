@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+import React from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { assets } from '../assets/assets'
 import { setSearch, setShowSearch } from '../store/slice/shopSlice'

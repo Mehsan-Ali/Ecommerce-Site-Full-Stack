@@ -1,5 +1,4 @@
-import {createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { getUserOrders } from "../../APIs/orderAPI";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface OrderState {
     orders: any[];
