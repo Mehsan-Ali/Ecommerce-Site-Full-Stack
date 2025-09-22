@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 // const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "http://localhost:5174"];
-const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "https://ecommerce-admin-theta-six.vercel.app/"];
+const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "https://ecommerce-admin-theta-six.vercel.app"];
 //middlewares
 app.use(express.json())
 app.use(cookieParser());
@@ -26,6 +26,18 @@ app.use(cors({
   },
   credentials: true,
 }));
+// ✅ Explicitly handle preflight OPTIONS request
+app.options("*", cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
 const PORT = process.env.PORT || 3000
 
 DatabaseConn()
