@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { Eye, ShoppingCart } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { backednUrl } from '../../../App'
 import { NavLink } from 'react-router-dom'
 
 const RececntOrders = ({ token }: { token: string }) => {
     const [rececntOrders, setRececntOrders] = useState([])
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     const fetchRececntOrders = async () => {
         try {

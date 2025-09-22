@@ -1,13 +1,11 @@
 import {
   DollarSign,
-  Eye,
   Package,
   ShoppingCart,
   TrendingDown,
   TrendingUp,
   Users
 } from 'lucide-react'
-import React from 'react'
 import TopProducts from './Sections/TopProducts'
 import RececntOrders from './Sections/RececntOrders'
 

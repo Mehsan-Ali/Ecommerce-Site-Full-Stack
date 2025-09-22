@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { assets } from '../assets/assets'
 import { Frown, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { backednUrl } from '../App'
