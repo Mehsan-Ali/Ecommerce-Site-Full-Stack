@@ -1,23 +1,31 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/assets'
-import { useForm } from 'react-hook-form'
-import { productSchema, type ProductFormData } from '../types/ProductForm'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import { backednUrl } from '../App'
-import { toast } from 'react-toastify'
+import React, { useState } from "react";
+import { assets } from "../assets/assets";
+import { useForm } from "react-hook-form";
+import { productSchema, type ProductFormData } from "../types/ProductForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { backednUrl } from "../App";
+import { toast } from "react-toastify";
 
 const Add = ({ token }: { token: string }) => {
 	const [imagePreview, setImagePreview] = useState<string[]>([]);
-	const [loading, setLoading] = useState<boolean>(false)
-	const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<ProductFormData>({
-		resolver: zodResolver(productSchema), defaultValues: {
+	const [loading, setLoading] = useState<boolean>(false);
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setValue,
+		watch,
+		formState: { errors },
+	} = useForm<ProductFormData>({
+		resolver: zodResolver(productSchema),
+		defaultValues: {
 			image: [],
 			sizes: [],
 			bestSeller: false,
 			date: Date.now(),
-		}
-	})
+		},
+	});
 	const selectedSizes = watch("sizes");
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +33,9 @@ const Add = ({ token }: { token: string }) => {
 			const filesArray = Array.from(e.target.files);
 			setValue("image", filesArray); // Update react-hook-form state
 			// Create preview URLs
-			const previews = filesArray.map(file => URL.createObjectURL(file));
+			const previews = filesArray.map((file) =>
+				URL.createObjectURL(file)
+			);
 			setImagePreview(previews);
 		}
 	};
@@ -33,14 +43,17 @@ const Add = ({ token }: { token: string }) => {
 	const toggleSize = (size: string) => {
 		const currentSizes = watch("sizes");
 		if (currentSizes.includes(size)) {
-			setValue("sizes", currentSizes.filter(s => s !== size));
+			setValue(
+				"sizes",
+				currentSizes.filter((s) => s !== size)
+			);
 		} else {
 			setValue("sizes", [...currentSizes, size]);
 		}
 	};
 
 	const onSubmit = async (data: ProductFormData) => {
-		setLoading(true)
+		setLoading(true);
 		try {
 			const formData = new FormData();
 			// Append text fields
@@ -59,12 +72,17 @@ const Add = ({ token }: { token: string }) => {
 				formData.append("image", file); // must match multer field name
 			});
 
-			const resp = await axios.post(`${backednUrl}/api/product/add`, formData, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "multipart/form-data"
+			const resp = await axios.post(
+				`${backednUrl}/api/product/add`,
+				formData,
+				{
+					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "multipart/form-data",
+					},
 				}
-			});
+			);
 
 			const productData = resp.data;
 			if (productData.success) {
@@ -77,13 +95,13 @@ const Add = ({ token }: { token: string }) => {
 			console.log(error);
 			toast.error(error.response?.data?.message);
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
 	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<div className='flex flex-col w-full items-start gap-3'>
+			<div className="flex flex-col w-full items-start gap-3">
 				<p>Upload Image</p>
 				<div className="flex gap-5 pt-2 flex-wrap">
 					{/* Show placeholder only if no images */}
@@ -115,10 +133,14 @@ const Add = ({ token }: { token: string }) => {
 							<button
 								type="button"
 								onClick={() => {
-									const updatedPreviews = imagePreview.filter((_, i) => i !== idx);
+									const updatedPreviews = imagePreview.filter(
+										(_, i) => i !== idx
+									);
 									setImagePreview(updatedPreviews);
 									const currentFiles = watch("image");
-									const updatedFiles = currentFiles.filter((_, i) => i !== idx);
+									const updatedFiles = currentFiles.filter(
+										(_, i) => i !== idx
+									);
 									setValue("image", updatedFiles);
 								}}
 								className="absolute top-1 right-1 bg-black text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-600"
@@ -128,66 +150,120 @@ const Add = ({ token }: { token: string }) => {
 						</div>
 					))}
 				</div>
-				{errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
+				{errors.image && (
+					<p className="text-red-500 text-sm">
+						{errors.image.message}
+					</p>
+				)}
 
 				{/* ------- Product Text Fields ------- */}
-				<div className='flex flex-col gap-2 w-full text-sm md:text-base mt-2 max-w-xl'>
-
-					<div className='flex flex-col gap-1'>
+				<div className="flex flex-col gap-2 w-full text-sm md:text-base mt-2 max-w-xl">
+					<div className="flex flex-col gap-1">
 						<label htmlFor="name">Product Name</label>
-						<input type="text" {...register("name")} id="name" placeholder='Enter your product title here...' className='border border-gray-300 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 text-gray-600 outline-amber-100 focus:outline-2 ' />
-						{errors.name && <p className='text-red-500 text-sm'>{errors.name?.message}</p>}
+						<input
+							type="text"
+							{...register("name")}
+							id="name"
+							placeholder="Enter your product title here..."
+							className="border border-gray-300 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 text-gray-600 outline-amber-100 focus:outline-2 "
+						/>
+						{errors.name && (
+							<p className="text-red-500 text-sm">
+								{errors.name?.message}
+							</p>
+						)}
 					</div>
 
-					<div className='flex flex-col gap-1'>
+					<div className="flex flex-col gap-1">
 						<label htmlFor="description">Product Description</label>
-						<textarea {...register("description")} rows={4} id="description" placeholder='Enter your product description here...' className='border border-gray-300 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 focus:outline-2 text-gray-600 outline-amber-100 ' />
-						{errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
-
+						<textarea
+							{...register("description")}
+							rows={4}
+							id="description"
+							placeholder="Enter your product description here..."
+							className="border border-gray-300 rounded-md py-2.5 px-2 sm:px-4 focus:outline-gray-200 focus:outline-2 text-gray-600 outline-amber-100 "
+						/>
+						{errors.description && (
+							<p className="text-red-500 text-sm">
+								{errors.description.message}
+							</p>
+						)}
 					</div>
 
-					<div className='flex justify-between flex-wrap md:flex-nowrap gap-2 md:gap-5 sm:mt-2 w-full'>
-						<div className='space-y-1 w-full'>
+					<div className="flex justify-between flex-wrap md:flex-nowrap gap-2 md:gap-5 sm:mt-2 w-full">
+						<div className="space-y-1 w-full">
 							<p>Product category</p>
-							<select  {...register("category")} className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
+							<select
+								{...register("category")}
+								className="border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2"
+							>
 								<option value="">Select</option>
 								<option value="Men">Men</option>
 								<option value="Women">Women</option>
 								<option value="Kids">Kids</option>
 							</select>
-							{errors.category && <p className="text-red-500 text-sm">{errors.category?.message}</p>}
+							{errors.category && (
+								<p className="text-red-500 text-sm">
+									{errors.category?.message}
+								</p>
+							)}
 						</div>
-						<div className='space-y-1 w-full'>
+						<div className="space-y-1 w-full">
 							<p>Product category</p>
-							<select {...register("subCategory")} className='border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2'>
+							<select
+								{...register("subCategory")}
+								className="border w-full focus:outline-gray-200 focus:outline-2 rounded-sm border-gray-300 px-2 py-2"
+							>
 								<option value="">Select</option>
 								<option value="Topwear">Topwear</option>
 								<option value="Bottomwear">Bottomwear</option>
 								<option value="Winterwear">Winterwear</option>
 							</select>
-							{errors.subCategory && <p className="text-red-500 text-sm">{errors.subCategory?.message}</p>}
+							{errors.subCategory && (
+								<p className="text-red-500 text-sm">
+									{errors.subCategory?.message}
+								</p>
+							)}
 						</div>
-						<div className='space-y-1 w-full'>
+						<div className="space-y-1 w-full">
 							<label htmlFor="productPrice">Product Price</label>
-							<input type="number"  {...register("price", { valueAsNumber: true })} id="productPrice" placeholder='0.00' className='border border-gray-300 w-full rounded-md mt-1 py-2 px-2 focus:outline-gray-200 text-gray-600 focus:outline-2' />
-							{errors.price && <p className="text-red-500 text-sm">{errors.price?.message}</p>}
+							<input
+								type="number"
+								{...register("price", { valueAsNumber: true })}
+								id="productPrice"
+								placeholder="0.00"
+								className="border border-gray-300 w-full rounded-md mt-1 py-2 px-2 focus:outline-gray-200 text-gray-600 focus:outline-2"
+							/>
+							{errors.price && (
+								<p className="text-red-500 text-sm">
+									{errors.price?.message}
+								</p>
+							)}
 						</div>
 					</div>
 
 					<div>
 						<p>Product Sizes</p>
-						<div className='grid grid-cols-5 gap-2 mt-2'>
-							{["S", "M", "L", "XL", "XXL"].map(size => (
+						<div className="grid grid-cols-5 gap-2 mt-2">
+							{["S", "M", "L", "XL", "XXL"].map((size) => (
 								<div
 									key={size}
 									onClick={() => toggleSize(size)}
-									className={`p-2 text-center border-none cursor-pointer font-medium border ${selectedSizes.includes(size) ? "bg-black text-white" : "bg-gray-200"
-										}`}>
+									className={`p-2 text-center border-none cursor-pointer font-medium border ${
+										selectedSizes.includes(size)
+											? "bg-black text-white"
+											: "bg-gray-200"
+									}`}
+								>
 									{size}
 								</div>
 							))}
 						</div>
-						{errors.sizes && <p className="text-red-500 text-sm">{errors.sizes.message}</p>}
+						{errors.sizes && (
+							<p className="text-red-500 text-sm">
+								{errors.sizes.message}
+							</p>
+						)}
 					</div>
 
 					<div className="flex items-center gap-2 mt-2">
@@ -195,17 +271,27 @@ const Add = ({ token }: { token: string }) => {
 						<label>Add to best seller</label>
 					</div>
 				</div>
-				<button disabled={loading} type='submit' className={`bg-black cursor-pointer text-sm md:text-base text-white py-3 uppercase font-medium max-w-sm w-full ${loading ? "bg-gray-400 cursor-not-allowed transform scale-95" : "bg-black hover:bg-gray-800 cursor-pointer hover:transform hover:scale-105"}`}>
+				<button
+					disabled={loading}
+					type="submit"
+					className={`bg-black cursor-pointer text-sm md:text-base text-white py-3 uppercase font-medium max-w-sm w-full ${
+						loading
+							? "bg-gray-400 cursor-not-allowed transform scale-95"
+							: "bg-black hover:bg-gray-800 cursor-pointer hover:transform hover:scale-105"
+					}`}
+				>
 					{loading ? (
 						<div className="flex items-center justify-center gap-3">
 							<div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
 							<span className="animate-pulse">Processing...</span>
 						</div>
-					) : "Add Product"}
+					) : (
+						"Add Product"
+					)}
 				</button>
 			</div>
 		</form>
-	)
-}
+	);
+};
 
-export default Add
+export default Add;
