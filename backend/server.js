@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 // const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "http://localhost:5174"];
-const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "https://ecommerce-admin-l38jqkpfg-mehsans-projects.vercel.app"];
+const allowedOrigins = ["https://ecommerce-site-full-stack.vercel.app", "https://ecommerce-admin-theta-six.vercel.app/"];
 //middlewares
 app.use(express.json())
 app.use(cookieParser());
