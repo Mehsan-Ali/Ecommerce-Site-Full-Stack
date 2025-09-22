@@ -26,17 +26,6 @@ app.use(cors({
   },
   credentials: true,
 }));
-// ✅ Explicitly handle preflight OPTIONS request
-app.options("*", cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
 
 const PORT = process.env.PORT || 3000
 
